@@ -3,7 +3,7 @@ workflow "Jekyll build now" {
   on = "push"
 }
 
-action "AsciiDoc toJekyll" {
+action "AsciiDoc to Jekyll" {
   uses = "./"
   env = {
     SRC = "sample_site"
