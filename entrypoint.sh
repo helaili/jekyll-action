@@ -6,7 +6,6 @@ echo "Starting the Jekyll Action from ${SRC} to ${DEST}"
 bundle install
 echo "Done installing"
 bundle exec jekyll build -s ${SRC} -d ${DEST}
-mkdir ${DEST}
 cd ${DEST}
 remote_repo="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
 remote_branch="gh-pages" && \
