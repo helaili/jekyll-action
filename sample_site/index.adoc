@@ -1,0 +1,16 @@
+= Sample site for Jekyll AsciiDoc Action
+:icons: font
+:showtitle:
+:toc: right
+:sourcedir: ..
+:page-title: Sample Site
+:page-description: Home of a sample site for the Jekyll AsciiDoc Action.
+
+
+== What's in the app?
+
+So many awesome things!!!
+
+:source-highlighter: pygments
+:pygments-style: manni
+:pygments-linenums-mode: inline
