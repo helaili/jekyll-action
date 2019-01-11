@@ -1,6 +1,6 @@
 workflow "Jekyll build" {
-  on = "label"
   resolves = ["AsciiDoc to Jekyll"]
+  on = "push"
 }
 
 action "AsciiDoc to Jekyll" {
