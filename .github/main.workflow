@@ -1,4 +1,4 @@
-workflow "New workflow" {
+workflow "Jekyll Build" {
   on = "label"
   resolves = ["AsciiDoc to Jekyll"]
 }
