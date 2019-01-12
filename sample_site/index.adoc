@@ -1,4 +1,4 @@
-= Sample site for Jekyll AsciiDoc Action
+= Sample AsciiDoc site built with a Jekyll Action
 :icons: font
 :showtitle:
 :toc: right
