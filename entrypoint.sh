@@ -2,14 +2,14 @@
 set -eu
 
 echo "#################################################"
-echo "Starting the Jekyll Action from ${SRC} to ${DEST}"
+echo "Starting the Jekyll Action from ${SRC}"
 bundle install
 echo "#################################################"
 echo "Installion completed"
-bundle exec jekyll build -s ${SRC} -d ${DEST}
+bundle exec jekyll build -s ${SRC} -d build
 echo "#################################################"
 echo "Jekyll build done"
-cd ${DEST}
+cd build
 touch .nojekyll
 echo "#################################################"
 echo "Now publishing"

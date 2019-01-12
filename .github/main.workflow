@@ -7,7 +7,6 @@ action "Jekyll Action" {
   uses = "./"
   env = {
     SRC = "sample_site"
-    DEST = "build"
   }
   secrets = ["GITHUB_TOKEN"]
 }
