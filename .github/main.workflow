@@ -6,11 +6,8 @@ workflow "Jekyll build now" {
 }
 
 action "Jekyll Action" {
-  uses = "helaili/jekyll-action@master"
+  uses = "./"
   needs = "Filters for GitHub Actions"
-  env = {
-    SRC = "sample_site"
-  }
   secrets = ["GITHUB_TOKEN"]
 }
 
