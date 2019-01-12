@@ -40,7 +40,9 @@ asciidoctor:
 Note that we also renamed `index.html` to `index.adoc` and modified this file accordingly in order to leverage AsciiDoc.
 
 ### Use the action
-Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to the `GITHUB_TOKEN` secret (just check the box) and a new `SRC` environment variable set with the location of your Jekyll site (`sample_site` for us). Note that it might be a good idea to use the `actions/bin/filter` action so the site is built only when a push happens on `master`.
+Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to the `GITHUB_TOKEN` secret (just check the box). The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `SRC` environment variable (`sample_site` for us).
+
+Note that it might be a good idea to use the `actions/bin/filter` action so the site is built only when a push happens on `master`.
 
 ![image](https://user-images.githubusercontent.com/2787414/51077261-2ef88f80-16a4-11e9-92e3-bcc76fdc5cd1.png)
 
