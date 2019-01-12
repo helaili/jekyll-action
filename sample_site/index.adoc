@@ -4,7 +4,7 @@
 :toc: right
 :sourcedir: ..
 :page-title: Sample Site
-:page-description: Home of a sample site for the Jekyll AsciiDoc Action.
+:page-description: Home of a sample AsciiDoc site for the Jekyll Action.
 
 
 == What's in the app?
