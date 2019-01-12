@@ -9,4 +9,5 @@ action "AsciiDoc to Jekyll" {
     SRC = "sample_site"
     DEST = "build"
   }
+  secrets = ["GITHUB_TOKEN"]
 }
