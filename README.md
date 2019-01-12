@@ -40,6 +40,10 @@ asciidoctor:
 Note that we also renamed `index.html` to `index.adoc` and modified this file accordingly in order to leverage AsciiDoc.
 
 ### Use the action
+Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to the `GITHUB_TOKEN` secret (just check the box) and a new `SRC` environment variable set with the location of your Jekyll site (`sample_site` for us)
+
+![image](https://user-images.githubusercontent.com/2787414/51070617-718a7f80-1644-11e9-8284-d08d4bc04c84.png)
+
 
 ```js
 action "Jekyll Action" {
