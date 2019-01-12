@@ -18,7 +18,6 @@ RUN apt-get update && \
         build-essential \
         ca-certificates \
         curl \
-        gnupg2 \
         libffi6 \
         make \
         shellcheck \
