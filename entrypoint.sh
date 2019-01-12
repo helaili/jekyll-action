@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -e
 
 echo "#################################################"
 echo "Starting the Jekyll Action"
