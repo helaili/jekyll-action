@@ -1,9 +1,9 @@
 workflow "Jekyll build now" {
-  resolves = ["AsciiDoc to Jekyll"]
+  resolves = ["Jekyll Action"]
   on = "push"
 }
 
-action "AsciiDoc to Jekyll" {
+action "Jekyll Action" {
   uses = "./"
   env = {
     SRC = "sample_site"
