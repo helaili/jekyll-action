@@ -2,15 +2,28 @@
 set -eu
 
 echo "#################################################"
-echo "Starting the Jekyll Action from ${SRC}"
+echo "Starting the Jekyll Action"
+
 bundle install
 echo "#################################################"
 echo "Installion completed"
+
+if [[ -z "${SRC}" ]]; then
+  SRC=$(find . -name _config.yml -exec dirname {} \;)
+fi
+
+echo "#################################################"
+echo "Source for the Jekyll site is set to ${SRC}"
+
 bundle exec jekyll build -s ${SRC} -d build
 echo "#################################################"
 echo "Jekyll build done"
+
 cd build
+
+# No need to have GitHub Pages to run Jekyll
 touch .nojekyll
+
 echo "#################################################"
 echo "Now publishing"
 remote_repo="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
