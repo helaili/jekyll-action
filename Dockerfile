@@ -6,7 +6,7 @@ LABEL homepage="https://github.com/helaili/jekyll-action"
 LABEL maintainer="Alain Hélaïli <helaili@github.com>"
 
 LABEL "com.github.actions.name"="Jekyll Action"
-LABEL "com.github.actions.description"="A GitHub Action to build Jekyll sites and publish to GitHub Pages"
+LABEL "com.github.actions.description"="A GitHub Action to build and publish Jekyll sites to GitHub Pages"
 LABEL "com.github.actions.icon"="book"
 LABEL "com.github.actions.color"="blue"
 COPY LICENSE README.md /
