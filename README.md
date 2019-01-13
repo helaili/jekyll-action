@@ -70,3 +70,9 @@ action "Filters for GitHub Actions" {
 }
 
 ```
+
+Upon successful execution, the GitHub Pages publishing will happen automatically and be listed on the deployment tab of your repository. 
+
+
+### Known Limitation
+Publishing of the GitHub pages site fails when the repository is private. I am investigating this.
