@@ -77,7 +77,7 @@ Upon successful execution, the GitHub Pages publishing will happen automatically
 
 Just click on `View deployment` of the `github-pages` environment to navigate to your GitHub Pages site.
 
-![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
+![image](https://user-images.githubusercontent.com/2787414/51083469-31e29700-171b-11e9-8f10-8c02dd485f83.png)
 
 ### Known Limitation
 Publishing of the GitHub pages site fails when the repository is private. I am investigating this.
