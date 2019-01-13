@@ -21,6 +21,9 @@ echo "Jekyll build done"
 
 cd build
 
+# No need to have GitHub Pages to run Jekyll
+touch .nojekyll
+
 echo "#################################################"
 echo "Now publishing"
 remote_repo="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
