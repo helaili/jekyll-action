@@ -33,6 +33,6 @@ git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
 git commit -m 'jekyll build from Action' && \
-git push --force $remote_repo master:$remote_branch > /dev/null 2>&1 && \
+git push --force $remote_repo master:$remote_branch && \
 rm -fr .git && \
 cd ..
