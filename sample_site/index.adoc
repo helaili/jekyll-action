@@ -6,7 +6,6 @@
 :page-title: Sample Site
 :page-description: Home of a sample AsciiDoc site for the Jekyll Action.
 
-
 == What's in the site?
 
 So many awesome things!!!
