@@ -71,8 +71,13 @@ action "Filters for GitHub Actions" {
 
 ```
 
-Upon successful execution, the GitHub Pages publishing will happen automatically and be listed on the deployment tab of your repository. 
+Upon successful execution, the GitHub Pages publishing will happen automatically and will be listed on the *_environment_* tab of your repository. 
 
+![image](https://user-images.githubusercontent.com/2787414/51083425-60ac3d80-171a-11e9-8b5f-264a1f29ffcf.png)
+
+Just click on `View deployment` of the `github-pages` environment to navigate to your GitHub Pages site.
+
+![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
 
 ### Known Limitation
 Publishing of the GitHub pages site fails when the repository is private. I am investigating this.
