@@ -7,11 +7,7 @@ workflow "Jekyll build now" {
 
 action "Jekyll Action" {
   uses = "./"
-  needs = "Filters for GitHub Actions"
-  secrets = ["GITHUB_TOKEN"]
-}
-
-action "Filters for GitHub Actions" {
-  uses = "actions/bin/filter@master"
-  args = "branch master"
+  secrets = [
+    "JEKYLL_PAT",
+  ]
 }
