@@ -27,10 +27,11 @@ touch .nojekyll
 echo "#################################################"
 echo "Now publishing"
 if [[ -z "${JEKYLL_PAT}" ]]; then
-  TOKEN=${JEKYLL_PAT}
-else 
   TOKEN=${GITHUB_TOKEN}
+else 
+  TOKEN=${JEKYLL_PAT}
 fi
+
 remote_repo="https://${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
 remote_branch="gh-pages" && \
 git init && \
