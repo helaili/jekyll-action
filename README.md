@@ -40,7 +40,7 @@ asciidoctor:
 Note that we also renamed `index.html` to `index.adoc` and modified this file accordingly in order to leverage AsciiDoc.
 
 ### Use the action
-Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to the `GITHUB_TOKEN` secret (just check the box). The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `SRC` environment variable (`sample_site` for us).
+Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to a `JEKYLL_PAT` secret set with a Personal Access Token. The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `SRC` environment variable (`sample_site` for us).
 
 Note that it might be a good idea to use the `actions/bin/filter` action so the site is built only when a push happens on `master`.
 
@@ -61,7 +61,7 @@ action "Jekyll Action" {
   env = {
     SRC = "sample_site"
   }
-  secrets = ["GITHUB_TOKEN"]
+  secrets = ["JEKYLL_PAT"]
 }
 
 action "Filters for GitHub Actions" {
@@ -80,4 +80,4 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 ![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
 
 ### Known Limitation
-Publishing of the GitHub pages site fails when the repository is public. I am investigating this.
+Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret instead of the `JEKYLL_PAT`. But it might work to :smile: 
