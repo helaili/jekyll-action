@@ -44,7 +44,7 @@ Use the `helaili/jekyll-action@master` action in your workflow file. It needs ac
 
 Note that it might be a good idea to use the `actions/bin/filter` action so the site is built only when a push happens on `master`.
 
-![image](https://user-images.githubusercontent.com/2787414/51077261-2ef88f80-16a4-11e9-92e3-bcc76fdc5cd1.png)
+<img width="1100" alt="image" src="https://user-images.githubusercontent.com/2787414/53498189-1ef70c80-3aa6-11e9-9dd1-c3b46657c499.png">
 
 
 ```js
