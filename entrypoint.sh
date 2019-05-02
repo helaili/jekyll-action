@@ -32,8 +32,21 @@ else
   TOKEN=${JEKYLL_PAT}
 fi
 
+echo ${GITHUB_REPOSITORY} | grep -E '^([a-z]*)\/\1\.github\.io$' > /dev/null
+if [ $? -eq 0 ]; then
+  remote_branch="master"
+else
+  remote_branch="gh-pages"
+fi
+
+if [ "${GITHUB_REF}" == "refs/heads/${remote_branch}" ]; then
+  echo "Cannot publish on branch ${remote_branch}"
+  exit 1
+else
+  echo "Pushing on branch ${remote_branch}"
+fi
+
 remote_repo="https://${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
-remote_branch="gh-pages" && \
 git init && \
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
