@@ -8,4 +8,7 @@ workflow "Jekyll build now" {
 action "Jekyll Action" {
   uses = "./"
   secrets = ["GITHUB_TOKEN"]
+  env = {
+    SRC = "sample_site"
+  }
 }
