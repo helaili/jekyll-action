@@ -6,6 +6,6 @@ workflow "Jekyll build now" {
 }
 
 action "Jekyll Action" {
-  uses = "simple_site"
+  uses = "sample_site"
   secrets = ["GITHUB_TOKEN"]
 }
