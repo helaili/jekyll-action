@@ -26,6 +26,7 @@ end
 ### Configure your Jekyll site
 Edit the configuration file of your Jekyll site (`_config.yml`) to leverage these plugins. In our sample, we want to leverage AsciiDoc so we added the following section:
 
+
 ```yaml
 asciidoc: {}
 asciidoctor:
