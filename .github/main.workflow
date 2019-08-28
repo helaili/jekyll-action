@@ -9,7 +9,7 @@ action "Jekyll Action" {
   uses = "./"
   needs = "Filters for GitHub Actions"
   env = {
-    SRC = "./sample_site"
+    SRC = "sample_site"
   }
   secrets = ["GITHUB_TOKEN"]
 }
