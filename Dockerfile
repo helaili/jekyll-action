@@ -26,5 +26,6 @@ RUN apt-get update && \
     && bundle config --global silence_root_warning 1
 
 COPY entrypoint.sh /
+RUN chmod 777 /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
