@@ -8,10 +8,10 @@ workflow "Jekyll build now" {
 action "Jekyll Action" {
   uses = "./"
   needs = "Filters for GitHub Actions"
+  secrets = ["GITHUB_TOKEN"]
   env = {
     SRC = "sample_site"
   }
-  secrets = ["GITHUB_TOKEN"]
 }
 
 action "Filters for GitHub Actions" {
