@@ -28,12 +28,11 @@ echo "#################################################"
 echo "Now publishing"
 if [[ -z "${JEKYLL_PAT}" ]]; then
   TOKEN=${GITHUB_TOKEN}
-else 
+else
   TOKEN=${JEKYLL_PAT}
 fi
 
-echo ${GITHUB_REPOSITORY} | grep -E '^([a-z]*)\/\1\.github\.io$' > /dev/null
-if [ $? -eq 0 ]; then
+if echo ${GITHUB_REPOSITORY} | grep -E '^([a-z]*)\/\1\.github\.io$'; then
   remote_branch="master"
 else
   remote_branch="gh-pages"
