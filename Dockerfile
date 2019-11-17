@@ -22,7 +22,7 @@ RUN apt-get update && \
         make \
         shellcheck \
         libffi6 \
-        git-all \
+        git \
     && bundle config --global silence_root_warning 1
 
 COPY entrypoint.sh /
