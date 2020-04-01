@@ -1,0 +1,13 @@
+name: Testing the GitHub Pages publication
+
+on:
+  push
+    
+jobs:
+  jekyll:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
