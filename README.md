@@ -55,12 +55,12 @@ jobs:
     - uses: actions/checkout@v2
     
     # Standard usage
-    - uses: ./ 
+    - uses:  helaili/jekyll-action@2.0.0
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
     
     # Specify the Jekyll source location as a parameter
-    - uses: ./
+    - uses: helaili/jekyll-action@2.0.0
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
