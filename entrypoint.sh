@@ -26,12 +26,6 @@ cd build
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
 
-if [[ -z "${JEKYLL_PAT}" ]]; then
-  TOKEN=${GITHUB_TOKEN}
-else 
-  TOKEN=${JEKYLL_PAT}
-fi
-
 # Is this a regular repo or an org.github.io type of repo
 if [[ "${GITHUB_REPOSITORY}" == *".github.io"* ]]; then
   remote_branch="master"
@@ -46,7 +40,7 @@ fi
 
 echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
 
-remote_repo="https://${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
+remote_repo="https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git" && \
 git init && \
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \

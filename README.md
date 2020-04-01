@@ -57,12 +57,12 @@ jobs:
     # Standard usage
     - uses: ./ 
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
     
     # Specify the Jekyll source location as a parameter
     - uses: ./
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
         jekyll_src: 'sample_site'
 ```
@@ -76,4 +76,4 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 ![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
 
 ### Known Limitation
-Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret instead of the `JEKYLL_PAT`. But it might work too :smile: 
+Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personnal Access Token set as a secret. But it might work too :smile: 
