@@ -10,6 +10,11 @@
 
 So many awesome things!!!
 
+[source,YAML]
+----
+include::{sourcedir}/.github/workflows/test.yml[lines=1]
+----
+
 :source-highlighter: pygments
 :pygments-style: manni
 :pygments-linenums-mode: inline
