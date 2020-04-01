@@ -40,35 +40,31 @@ asciidoctor:
 Note that we also renamed `index.html` to `index.adoc` and modified this file accordingly in order to leverage AsciiDoc.
 
 ### Use the action
-Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to a `JEKYLL_PAT` secret set with a Personal Access Token. The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `SRC` environment variable (`sample_site` for us).
+Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to a `JEKYLL_PAT` secret set with a Personal Access Token. The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `jekyll_src` parameter (`sample_site` for us). The `SRC` environment variable is also supported for backward compatibilty but it is deprecated.
 
-Note that it might be a good idea to use the `actions/bin/filter` action so the site is built only when a push happens on `master`.
+```yaml
+name: Testing the GitHub Pages publication
 
-<img width="1100" alt="image" src="https://user-images.githubusercontent.com/2787414/53498189-1ef70c80-3aa6-11e9-9dd1-c3b46657c499.png">
-
-
-```js
-workflow "Jekyll build now" {
-  resolves = [
-    "Jekyll Action",
-  ]
-  on = "push"
-}
-
-action "Jekyll Action" {
-  uses = "helaili/jekyll-action@master"
-  needs = "Filters for GitHub Actions"
-  env = {
-    SRC = "sample_site"
-  }
-  secrets = ["JEKYLL_PAT"]
-}
-
-action "Filters for GitHub Actions" {
-  uses = "actions/bin/filter@b2bea0749eed6beb495a8fa194c071847af60ea1"
-  args = "branch master"
-}
-
+on:
+  push
+    
+jobs:
+  jekyll:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Standard usage
+    - uses: ./ 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    # Specify the Jekyll source location as a parameter
+    - uses: ./
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        jekyll_src: 'sample_site'
 ```
 
 Upon successful execution, the GitHub Pages publishing will happen automatically and will be listed on the *_environment_* tab of your repository. 
