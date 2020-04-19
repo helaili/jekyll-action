@@ -4,6 +4,7 @@ set -e
 echo "Starting the Jekyll Action"
 
 echo "::debug ::Starting bundle install"
+bundle config path vendor/bundle
 bundle install
 echo "::debug ::Completed bundle install"
 
