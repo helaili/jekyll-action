@@ -77,3 +77,6 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 
 ### Known Limitation
 Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personnal Access Token set as a secret. But it might work too :smile: 
+
+### Thank  you
+@limjh16 
