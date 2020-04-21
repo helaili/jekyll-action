@@ -17,11 +17,6 @@ jobs:
     - uses: ./
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: error-logs
-        path: vendor/bundle
 
 
   
