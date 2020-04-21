@@ -10,7 +10,8 @@ COPY LICENSE README.md /
 # ENV BUNDLER_VERSION 1.17.3
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-        git
+        git \
+        ruby-dev
 
 COPY entrypoint.sh /
 
