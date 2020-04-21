@@ -8,9 +8,20 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-\
     - uses: ./
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: error-logs
+        path: vendor/bundle
 
 
   
