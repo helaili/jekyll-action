@@ -63,8 +63,9 @@ PLATFORMS
 
 DEPENDENCIES
   coderay (~> 1.1.0)
+  eventmachine
   jekyll (~> 3.8.5)
   jekyll-asciidoc (~> 2.1.1)
 
 BUNDLED WITH
-   2.1.2
+   2.1.4
