@@ -5,8 +5,6 @@ email: helaili@github.com
 exclude:
   - LICENSE.adoc
   - README.adoc
-  - Gemfile
-  - Gemfile.lock
 asciidoc: {}
 asciidoctor:
   base_dir: :docdir
