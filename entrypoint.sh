@@ -15,7 +15,7 @@ elif [[ ${SRC} ]]; then
   JEKYLL_SRC=${SRC}
   echo "::debug ::Using SRC environment var value ${INPUT_JEKYLL_SRC} as a source directory"
 else
-  JEKYLL_SRC=$(find . -not \( -path vendor/bundle -prune \) -name _config.yml -exec dirname {} \;)
+  JEKYLL_SRC=$(find . -name _config.yml -exec dirname {} \;)
   echo "::debug ::Resolved ${INPUT_JEKYLL_SRC} as a source directory"
 fi
 
