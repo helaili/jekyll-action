@@ -17,8 +17,6 @@ jobs:
     - uses: ./
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-      with:
-        jekyll_src: 'sample_site'
 
 
   
