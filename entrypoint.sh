@@ -19,7 +19,7 @@ else
   echo "::debug ::Resolved ${JEKYLL_SRC} as a source directory"
 fi
 
-bundle exec jekyll build -s ${JEKYLL_SRC} -d build
+JEKYLL_ENV=production bundle exec jekyll build -s ${JEKYLL_SRC} -d build
 echo "Jekyll build done"
 
 cd build
