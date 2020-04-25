@@ -65,12 +65,12 @@ jobs:
           ${{ runner.os }}-gems-
 
     # Standard usage
-    - uses:  helaili/jekyll-action@2.0.0
+    - uses:  helaili/jekyll-action@2.0.1
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
     
     # Specify the Jekyll source location as a parameter
-    - uses: helaili/jekyll-action@2.0.0
+    - uses: helaili/jekyll-action@2.0.1
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
