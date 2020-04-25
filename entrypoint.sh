@@ -1,21 +1,22 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 echo "Starting the Jekyll Action"
 
 echo "::debug ::Starting bundle install"
+bundle config path vendor/bundle
 bundle install
 echo "::debug ::Completed bundle install"
 
 if [[ ${INPUT_JEKYLL_SRC} ]]; then
   JEKYLL_SRC=${INPUT_JEKYLL_SRC}
-  echo "::debug ::Using parameter value ${INPUT_JEKYLL_SRC} as a source directory"
+  echo "::debug ::Using parameter value ${JEKYLL_SRC} as a source directory"
 elif [[ ${SRC} ]]; then
   JEKYLL_SRC=${SRC}
-  echo "::debug ::Using SRC environment var value ${INPUT_JEKYLL_SRC} as a source directory"
+  echo "::debug ::Using SRC environment var value ${JEKYLL_SRC} as a source directory"
 else
-  JEKYLL_SRC=$(find . -name _config.yml -exec dirname {} \;)
-  echo "::debug ::Resolved ${INPUT_JEKYLL_SRC} as a source directory"
+  JEKYLL_SRC=$(find . -path ./vendor/bundle -prune -o -name '_config.yml' -exec dirname {} \;)
+  echo "::debug ::Resolved ${JEKYLL_SRC} as a source directory"
 fi
 
 bundle exec jekyll build -s ${JEKYLL_SRC} -d build
@@ -45,7 +46,7 @@ git init && \
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
-git commit -m 'jekyll build from Action' && \
+git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
 git push --force $remote_repo master:$remote_branch && \
 rm -fr .git && \
 cd ..

@@ -1,18 +1,16 @@
-FROM ruby:2.7.1-slim
+FROM ruby:2.7-alpine
 
-LABEL version="2.0.0"
+LABEL version="2.0.1"
 LABEL repository="https://github.com/helaili/jekyll-action"
 LABEL homepage="https://github.com/helaili/jekyll-action"
 LABEL maintainer="Alain Hélaïli <helaili@github.com>"
 
-COPY LICENSE README.md /
+RUN apk add --no-cache git build-base
 
-# ENV BUNDLER_VERSION 1.17.3
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
-        build-essential \
-        git \
-    && bundle config --global silence_root_warning 1
+# debug
+RUN bundle version
+
+COPY LICENSE README.md /
 
 COPY entrypoint.sh /
 

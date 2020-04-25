@@ -42,6 +42,8 @@ Note that we also renamed `index.html` to `index.adoc` and modified this file ac
 ### Use the action
 Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to a `JEKYLL_PAT` secret set with a Personal Access Token. The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `jekyll_src` parameter (`sample_site` for us). The `SRC` environment variable is also supported for backward compatibilty but it is deprecated.
 
+Use the `actions/cache` action in the workflow as well, to shorten build times and decrease load on GitHub's servers
+
 ```yaml
 name: Testing the GitHub Pages publication
 
@@ -53,7 +55,15 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
     - uses: actions/checkout@v2
-    
+
+    # Use GitHub Actions' cache to shorten build times and decrease load on servers
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
     # Standard usage
     - uses:  helaili/jekyll-action@2.0.0
       env:
