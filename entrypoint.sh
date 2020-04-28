@@ -49,4 +49,4 @@ git add . && \
 git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
 git push --force $remote_repo master:$remote_branch && \
 rm -fr .git && \
-cd .. && echo Success || echo Failed
+cd .. && exit 0 || exit 1
