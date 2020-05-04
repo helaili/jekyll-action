@@ -41,7 +41,7 @@ fi
 
 echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
 
-remote_repo="https://${JEKYLL_PATXXX}@github.com/${GITHUB_REPOSITORY}.git" && \
+remote_repo="https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git" && \
 git init && \
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
