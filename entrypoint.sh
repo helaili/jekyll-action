@@ -8,10 +8,10 @@ bundle config path vendor/bundle
 bundle install
 echo "::debug ::Completed bundle install"
 
-if [[ ${INPUT_JEKYLL_SRC} ]]; then
+if [ -n "${INPUT_JEKYLL_SRC}" ]; then
   JEKYLL_SRC=${INPUT_JEKYLL_SRC}
   echo "::debug ::Using parameter value ${JEKYLL_SRC} as a source directory"
-elif [[ ${SRC} ]]; then
+elif [ -n "${SRC}" ]; then
   JEKYLL_SRC=${SRC}
   echo "::debug ::Using SRC environment var value ${JEKYLL_SRC} as a source directory"
 else
@@ -28,13 +28,12 @@ cd build
 touch .nojekyll
 
 # Is this a regular repo or an org.github.io type of repo
-if [[ "${GITHUB_REPOSITORY}" == *".github.io"* ]]; then
-  remote_branch="master"
-else
-  remote_branch="gh-pages"
-fi
+case "${GITHUB_REPOSITORY}" in
+  *.github.io) remote_branch="master" ;;
+  *)           remote_branch="gh-pages" ;;
+esac
 
-if [ "${GITHUB_REF}" == "refs/heads/${remote_branch}" ]; then
+if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
   echo "Cannot publish on branch ${remote_branch}"
   exit 1
 fi
