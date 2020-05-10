@@ -3,7 +3,6 @@ set -e
 
 echo "Starting the Jekyll Action"
 
-echo "x${JEKYLL_PAT}x"
 if [ -z "${JEKYLL_PAT}" ]; then
   echo "No token provided. Please set the JEKYLL_PAT environment variable."
   exit 1
