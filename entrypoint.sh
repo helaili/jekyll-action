@@ -3,6 +3,12 @@ set -e
 
 echo "Starting the Jekyll Action"
 
+echo "x${JEKYLL_PAT}x"
+if [ -z "${JEKYLL_PAT}" ]; then
+  echo "No token provided. Please set the JEKYLL_PAT environment variable."
+  exit 1
+fi 
+
 echo "::debug ::Starting bundle install"
 bundle config path vendor/bundle
 bundle install
@@ -39,6 +45,7 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
+echo "::debug ::Pushing to https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git"
 
 remote_repo="https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git" && \
 git init && \
