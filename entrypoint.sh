@@ -8,6 +8,12 @@ if [ -z "${JEKYLL_PAT}" ]; then
   exit 1
 fi 
 
+#Adding input variable for site and GemFile under sub directory
+if [ -n "${INPUT_GEM_SRC}" ]; then
+  cd ${INPUT_GEM_SRC}
+  echo "::debug ::Working directory $(pwd)"
+fi
+
 echo "::debug ::Starting bundle install"
 bundle config path vendor/bundle
 bundle install
