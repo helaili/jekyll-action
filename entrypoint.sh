@@ -8,6 +8,11 @@ if [ -z "${JEKYLL_PAT}" ]; then
   exit 1
 fi 
 
+if [ -n "${INPUT_JEKYLL_ROOT}" ]; then
+  echo "::debug ::Switching to ${INPUT_JEKYLL_ROOT} as a root directory"
+  cd ${INPUT_JEKYLL_ROOT}
+fi
+
 echo "::debug ::Starting bundle install"
 bundle config path vendor/bundle
 bundle install
