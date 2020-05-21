@@ -27,6 +27,7 @@ BUNDLE_ARGS="$BUNDLE_ARGS --gemfile $GEM_SRC/Gemfile"
 
 echo "::debug::Starting bundle install"
 bundle config set deployment true
+bundle config path "$PWD/vendor/bundle"
 bundle install ${BUNDLE_ARGS}
 echo "::debug::Completed bundle install"
 
