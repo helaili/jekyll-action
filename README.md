@@ -3,7 +3,7 @@ A GitHub Action to build and publish Jekyll sites to GitHub Pages
 
 Out-of-the-box Jekyll with GitHub Pages allows you to leverage a limited, white-listed, set of gems. Complex sites requiring custom ones or non white-listed ones (AsciiDoc for intstance) used to require a continuous integration build in order to pre-process the site.
 
-Note that this is a rather simple (naive maybe) Docker based action. @limjh16 has created [a JS based version of this action](https://github.com/limjh16/jekyll-action-ts) which saves the container download time and might help with non default use cases. 
+Note that this is a rather simple (naive maybe) Docker based action. @limjh16 has created [a JS based version of this action](https://github.com/limjh16/jekyll-action-ts) which saves the container download time and might help with non default use cases.
 
 
 ## Usage
@@ -47,12 +47,15 @@ Use the `helaili/jekyll-action@master` action in your workflow file. It needs ac
 
 Use the `actions/cache` action in the workflow as well, to shorten build times and decrease load on GitHub's servers
 
+If your GitHub Pages site uses a custom domain, you can set
+`github_pages_custom_domain` to ensure the domain is linked properly.
+
 ```yaml
 name: Testing the GitHub Pages publication
 
 on:
   push
-    
+
 jobs:
   jekyll:
     runs-on: ubuntu-16.04
@@ -71,7 +74,7 @@ jobs:
     - uses:  helaili/jekyll-action@2.0.3
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-    
+
     # Specify the Jekyll source location as a parameter
     - uses: helaili/jekyll-action@2.0.3
       env:
@@ -80,7 +83,7 @@ jobs:
         jekyll_src: 'sample_site'
 ```
 
-Upon successful execution, the GitHub Pages publishing will happen automatically and will be listed on the *_environment_* tab of your repository. 
+Upon successful execution, the GitHub Pages publishing will happen automatically and will be listed on the *_environment_* tab of your repository.
 
 ![image](https://user-images.githubusercontent.com/2787414/51083469-31e29700-171b-11e9-8f10-8c02dd485f83.png)
 
@@ -89,4 +92,16 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 ![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
 
 ### Known Limitation
-Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile: 
+Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile:
+
+### Note on custom domains
+If you're using a Custom Domain for your GitHub Pages site, you will need to
+ensure that the `CNAME` file exists in the repository root of the `main` (or
+`master`) branch so that it can be copied to the deployment root when your site
+is deployed. If your GitHub Pages site is run off the `main` (or `master`)
+branch, you can modify the Custom Domain setting in the Repository Settings to
+automatically generate and commit the `CNAME` file. If your GitHub Pages site is
+run off an _alternate_ branch, however, you will need to manually create and
+commit the `CNAME` file with your custom domain as its contents, otherwise the
+file will be committed to the deployment branch and _overwritten the next time
+the action is run_.
