@@ -10,9 +10,27 @@ fi
 
 BUNDLE_ARGS=""
 
+if [ -n "${INPUT_JEKYLL_SRC}" ]; then
+  JEKYLL_SRC="${INPUT_JEKYLL_SRC}"
+  echo "::debug::Source directory is set via input parameter"
+elif [ -n "${SRC}" ]; then
+  JEKYLL_SRC=${SRC}
+  echo "::debug::Source directory is set via SRC environment var"
+else
+  JEKYLL_SRC=$(find . -path '*/vendor/bundle' -prune -o -name '_config.yml' -exec dirname {} \;)
+  echo "::debug::Source directory is found in file system"
+fi
+echo "::debug::Using \"${JEKYLL_SRC}\" as a source directory"
+
 if [ -n "${INPUT_GEM_SRC}" ]; then
   GEM_SRC="${INPUT_GEM_SRC}"
-else 
+  echo "::debug::Gem directory is set via input parameter"
+elif [ -f "${JEKYLL_SRC}/Gemfile.lock" ]; then
+  GEM_SRC="${JEKYLL_SRC}"
+  echo "::debug::Gem directory is set via source directory"
+fi
+
+if [ -z "${GEM_SRC}" ]; then
   GEM_SRC=$(find . -path '*/vendor/bundle' -prune -o -name Gemfile.lock -exec dirname {} \;)
   GEM_FILES_COUNT=$(echo "$GEM_SRC" | wc -l)
   if [ "$GEM_FILES_COUNT" != "1" ]; then
@@ -21,8 +39,10 @@ else
     exit 1
   fi
   GEM_SRC=$(echo $GEM_SRC | tr -d '\n')
+  echo "::debug::Gem directory is found in file system"
 fi
-echo "::debug::Using ${GEM_SRC} as Gem directory"
+echo "::debug::Using \"${GEM_SRC}\" as Gem directory"
+
 BUNDLE_ARGS="$BUNDLE_ARGS --gemfile $GEM_SRC/Gemfile"
 
 echo "::debug::Starting bundle install"
@@ -30,17 +50,6 @@ bundle config set deployment true
 bundle config path "$PWD/vendor/bundle"
 bundle install ${BUNDLE_ARGS}
 echo "::debug::Completed bundle install"
-
-if [ -n "${INPUT_JEKYLL_SRC}" ]; then
-  JEKYLL_SRC="${INPUT_JEKYLL_SRC}"
-  echo "::debug::Using parameter value ${JEKYLL_SRC} as a source directory"
-elif [ -n "${SRC}" ]; then
-  JEKYLL_SRC=${SRC}
-  echo "::debug::Using SRC environment var value ${JEKYLL_SRC} as a source directory"
-else
-  JEKYLL_SRC=$(find . -path '*/vendor/bundle' -prune -o -name '_config.yml' -exec dirname {} \;)
-  echo "::debug::Resolved ${JEKYLL_SRC} as a source directory"
-fi
 
 JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${JEKYLL_SRC} -d build
 echo "Jekyll build done"
