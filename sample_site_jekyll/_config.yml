@@ -1,0 +1,15 @@
+title: Jekyll AsciiDoc Action
+description: A GitHub Action to publish AsciiDoc content as a GitHub Pages site
+author: Alain Helaili
+email: helaili@github.com
+exclude:
+  - LICENSE.adoc
+  - README.adoc
+asciidoc: {}
+asciidoctor:
+  base_dir: :docdir
+  safe: unsafe
+  attributes:
+    - idseparator=_
+    - source-highlighter=coderay
+    - icons=font
