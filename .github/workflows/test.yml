@@ -27,6 +27,8 @@ jobs:
         gem_src: sample_site
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+    - name: clean up
+      run: rm Gemfile Gemfile.lock
     - name: Basic run
       uses: ./
       env:
