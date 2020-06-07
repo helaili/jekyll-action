@@ -45,11 +45,13 @@ echo "::debug::Using \"${GEM_SRC}\" as Gem directory"
 
 BUNDLE_ARGS="$BUNDLE_ARGS --gemfile $GEM_SRC/Gemfile"
 
-echo "::debug::Starting bundle install"
+echo "::debug::Starting bundle install with BUNDLE_ARGS=${BUNDLE_ARGS}"
 bundle config set deployment true
 bundle config path "$PWD/vendor/bundle"
 bundle install ${BUNDLE_ARGS}
 echo "::debug::Completed bundle install"
+
+cp $GEM_SRC/Gemfile* .
 
 JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${JEKYLL_SRC} -d build
 echo "Jekyll build done"
