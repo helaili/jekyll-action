@@ -58,8 +58,6 @@ bundle config path "$PWD/vendor/bundle"
 bundle install ${BUNDLE_ARGS}
 echo "::debug::Completed bundle install"
 
-cp $GEM_SRC/Gemfile* .
-
 JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${JEKYLL_SRC} -d build
 echo "Jekyll build done"
 
