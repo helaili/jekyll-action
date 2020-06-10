@@ -18,6 +18,13 @@ elif [ -n "${SRC}" ]; then
   echo "::debug::Source directory is set via SRC environment var"
 else
   JEKYLL_SRC=$(find . -path '*/vendor/bundle' -prune -o -name '_config.yml' -exec dirname {} \;)
+  JEKYLL_FILES_COUNT=$(echo "$JEKYLL_SRC" | wc -l)
+  if [ "$JEKYLL_FILES_COUNT" != "1" ]; then
+    echo "::error::Found $JEKYLL_FILES_COUNT Jekyll sites! Please define which to use with input variable \"jekyll_src\""
+    echo "$JEKYLL_SRC"
+    exit 1
+  fi
+  JEKYLL_SRC=$(echo $JEKYLL_SRC | tr -d '\n')
   echo "::debug::Source directory is found in file system"
 fi
 echo "::debug::Using \"${JEKYLL_SRC}\" as a source directory"
@@ -34,7 +41,7 @@ if [ -z "${GEM_SRC}" ]; then
   GEM_SRC=$(find . -path '*/vendor/bundle' -prune -o -name Gemfile.lock -exec dirname {} \;)
   GEM_FILES_COUNT=$(echo "$GEM_SRC" | wc -l)
   if [ "$GEM_FILES_COUNT" != "1" ]; then
-    echo "::error::Found $GEM_FILES_COUNT Gemfiles! Please define which to use with input variable \"GEM_SRC\""
+    echo "::error::Found $GEM_FILES_COUNT Gemfiles! Please define which to use with input variable \"gem_src\""
     echo "$GEM_SRC"
     exit 1
   fi
