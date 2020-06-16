@@ -20,6 +20,7 @@ jobs:
         jekyll_src: sample_site
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
     - name: Run with jekyll_src and gem_src
       uses: ./
       with: 

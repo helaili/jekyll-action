@@ -55,13 +55,16 @@ bundle config path "$PWD/vendor/bundle"
 bundle install
 echo "::debug::Completed bundle install"
 
-if [ -n "${ACTIONS_STEP_DEBUG}" ]; then
-# Activating debug for Jekyll as well
-  echo "::debug::Jekyll debug is :white_chek_mark:"
-  export LOG_LEVEL=DEBUG
+VERBOSE=""
+if [ "${JEKYLL_DEBUG}" = true ]; then
+  # Activating debug for Jekyll
+  echo "::debug::Jekyll debug is on"
+  VERBOSE="--verbose"
+else 
+  echo "::debug::Jekyll debug is off"
 fi
 
-JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build  --verbose
+JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${VERBOSE}
 echo "Jekyll build done"
 
 cd build
