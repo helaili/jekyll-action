@@ -7,7 +7,7 @@ exclude:
   - README.adoc
 asciidoc: {}
 asciidoctor:
-  base_dir: :docdir
+  base_dir: :source
   safe: unsafe
   attributes:
     - idseparator=_
