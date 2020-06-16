@@ -8,8 +8,6 @@ if [ -z "${JEKYLL_PAT}" ]; then
   exit 1
 fi 
 
-BUNDLE_ARGS=""
-
 if [ -n "${INPUT_JEKYLL_SRC}" ]; then
   JEKYLL_SRC="${INPUT_JEKYLL_SRC}"
   echo "::debug::Source directory is set via input parameter"
@@ -50,15 +48,20 @@ if [ -z "${GEM_SRC}" ]; then
 fi
 echo "::debug::Using \"${GEM_SRC}\" as Gem directory"
 
-BUNDLE_ARGS="$BUNDLE_ARGS --gemfile $GEM_SRC/Gemfile"
+cd $GEM_SRC
 
-echo "::debug::Starting bundle install with BUNDLE_ARGS=${BUNDLE_ARGS}"
 bundle config set deployment true
 bundle config path "$PWD/vendor/bundle"
-bundle install ${BUNDLE_ARGS}
+bundle install
 echo "::debug::Completed bundle install"
 
-JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${JEKYLL_SRC} -d build
+if [ -n "${ACTIONS_STEP_DEBUG}" ]; then
+# Activating debug for Jekyll as well
+  echo "::debug::Jekyll debug is :white_chek_mark:"
+  export LOG_LEVEL=DEBUG
+fi
+
+JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build  --verbose
 echo "Jekyll build done"
 
 cd build
