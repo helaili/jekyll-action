@@ -5,7 +5,6 @@ email: helaili@github.com
 exclude:
   - LICENSE.adoc
   - README.adoc
-asciidoc: {}
 asciidoctor:
   base_dir: :source
   safe: unsafe
