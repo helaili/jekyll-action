@@ -4,7 +4,7 @@ on:
   push
     
 jobs:
-  jekyll:
+  jekyll_src:
     runs-on: ubuntu-16.04
     steps:
     - uses: actions/checkout@v2
@@ -20,6 +20,17 @@ jobs:
         jekyll_src: sample_site
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        
+  jekyll_gem_src:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-\
     - name: Run with jekyll_src and gem_src
       uses: ./
       with: 
@@ -27,6 +38,17 @@ jobs:
         gem_src: sample_site
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+  
+  jekyll_auto:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-\
     - name: Basic run
       uses: ./
       env:
