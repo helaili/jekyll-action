@@ -47,9 +47,6 @@ Use the `helaili/jekyll-action@master` action in your workflow file. It needs ac
 
 Use the `actions/cache` action in the workflow as well, to shorten build times and decrease load on GitHub's servers
 
-If your GitHub Pages site uses a custom domain, you can set
-`github_pages_custom_domain` to ensure the domain is linked properly.
-
 ```yaml
 name: Testing the GitHub Pages publication
 
