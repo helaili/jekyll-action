@@ -95,13 +95,8 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile:
 
 ### Note on custom domains
-If you're using a Custom Domain for your GitHub Pages site, you will need to
-ensure that the `CNAME` file exists in the repository root of the `main` (or
-`master`) branch so that it can be copied to the deployment root when your site
-is deployed. If your GitHub Pages site is run off the `main` (or `master`)
-branch, you can modify the Custom Domain setting in the Repository Settings to
-automatically generate and commit the `CNAME` file. If your GitHub Pages site is
-run off an _alternate_ branch, however, you will need to manually create and
-commit the `CNAME` file with your custom domain as its contents, otherwise the
-file will be committed to the deployment branch and _overwritten the next time
-the action is run_.
+If you're using a Custom Domain for your GitHub Pages site, you will need to ensure that the `CNAME` file exists in the repository root of the `main` (or `master`) branch so that it can be copied to the deployment root when your site is deployed.
+
+If your GitHub Pages site is run off the `main` (or `master`) branch, you can modify the Custom Domain setting in the Repository Settings to automatically generate and commit the `CNAME` file.
+
+If your GitHub Pages site is run off an _alternate_ branch, however, you will need to manually create and commit the `CNAME` file with your custom domain as its contents, otherwise the file will be committed to the deployment branch and _overwritten the next time the action is run_.
