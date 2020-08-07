@@ -67,7 +67,7 @@ fi
 JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${VERBOSE}
 echo "Jekyll build done"
 
-if [ "${JEKYLL_PUBLISH}" = true ]; then
+if [ "${JEKYLL_PUBLISH}" = "true" ]; then
   cd build
 
   # No need to have GitHub Pages to run Jekyll
