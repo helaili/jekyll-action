@@ -17,6 +17,7 @@ jobs:
         uses: ./
         with:
           jekyll_src: sample_site
+          jekyll_publish: true
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
           JEKYLL_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
@@ -25,12 +26,15 @@ jobs:
         with:
           jekyll_src: sample_site
           gem_src: sample_site_gemfiles
+          jekyll_publish: true
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       - name: Basic run
         uses: ./
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        with:
+          jekyll_publish: true
       - name: No publishing
         uses: ./
         env:
