@@ -7,6 +7,9 @@ inputs:
   gem_src:
     description: 'The Jekyll Gemfile directory'
     required: false
+  jekyll_publish:
+    description: 'Publish build files to github pages'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
