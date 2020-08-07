@@ -1,34 +1,39 @@
 name: Testing the GitHub Pages publication
 
-on:
-  push
-    
+on: push
+
 jobs:
   jekyll:
     runs-on: ubuntu-16.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v1
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gems-\
-    - name: Run with jekyll_src
-      uses: ./
-      with: 
-        jekyll_src: sample_site
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-        JEKYLL_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
-    - name: Run with jekyll_src and gem_src
-      uses: ./
-      with: 
-        jekyll_src: sample_site
-        gem_src: sample_site_gemfiles
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-    - name: Basic run
-      uses: ./
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-\
+      - name: Run with jekyll_src
+        uses: ./
+        with:
+          jekyll_src: sample_site
+        env:
+          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+          JEKYLL_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
+      - name: Run with jekyll_src and gem_src
+        uses: ./
+        with:
+          jekyll_src: sample_site
+          gem_src: sample_site_gemfiles
+        env:
+          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      - name: Basic run
+        uses: ./
+        env:
+          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      - name: No publishing
+        uses: ./
+        env:
+          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        with:
+          jekyll_publish: false

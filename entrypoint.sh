@@ -82,7 +82,7 @@ if [ "${JEKYLL_PUBLISH}" = true ]; then
   if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
     echo "::error::Cannot publish on branch ${remote_branch}"
     exit 1
-  fi`
+  fi
 
   echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
   echo "::debug::Pushing to https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git"
@@ -96,6 +96,8 @@ if [ "${JEKYLL_PUBLISH}" = true ]; then
   git push --force $remote_repo master:$remote_branch && \
   rm -fr .git && \
   cd .. 
+else
+  echo "::debug::Not pushing to github."
 fi
 
 exit $?
