@@ -8,6 +8,15 @@ if [ -z "${JEKYLL_PAT}" ]; then
   exit 1
 fi 
 
+if [ -n "${INPUT_JEKYLL_PUBLISH}" ]; then
+  JEKYLL_PUBLISH=${INPUT_JEKYLL_PUBLISH}
+  echo "::debug::Publish is set via input parameter."
+else
+  JEKYLL_PUBLISH=true
+  echo "::debug::Publish not set via input parameter, default to true."
+fi
+  
+
 if [ -n "${INPUT_JEKYLL_SRC}" ]; then
   JEKYLL_SRC="${INPUT_JEKYLL_SRC}"
   echo "::debug::Source directory is set via input parameter"
@@ -67,7 +76,7 @@ fi
 JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${VERBOSE}
 echo "Jekyll build done"
 
-if [ "${JEKYLL_PUBLISH}" = "true" ]; then
+if [ "${JEKYLL_PUBLISH}" = true ]; then
   cd build
 
   # No need to have GitHub Pages to run Jekyll
