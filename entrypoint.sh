@@ -72,11 +72,17 @@ cd build
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
 
-# Is this a regular repo or an org.github.io type of repo
-case "${GITHUB_REPOSITORY}" in
-  *.github.io) remote_branch="master" ;;
-  *)           remote_branch="gh-pages" ;;
-esac
+
+if [ -n "${INPUT_TARGET_BRANCH}" ]; then
+  remote_branch="${INPUT_TARGET_BRANCH}"
+  echo "::debug::target branch is set via input parameter"
+else
+  # Is this a regular repo or an org.github.io type of repo
+  case "${GITHUB_REPOSITORY}" in
+    *.github.io) remote_branch="master" ;;
+    *)           remote_branch="gh-pages" ;;
+  esac
+fi
 
 if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
   echo "::error::Cannot publish on branch ${remote_branch}"

@@ -7,6 +7,9 @@ inputs:
   gem_src:
     description: 'The Jekyll Gemfile directory'
     required: false
+  target_branch:
+    description: 'The target branch name the sources get pushed to'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
