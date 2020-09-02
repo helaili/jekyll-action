@@ -6,7 +6,7 @@ Out-of-the-box Jekyll with GitHub Pages allows you to leverage a limited, white-
 Remember that GitHub is serving your built static site, not it's sources. So when configuring GitHub Pages in your project settings, use **gh-pages branch** as a Source for GitHub Pages. If you are setting up *username*.github.io repository, you'll have to use **master branch**, so sources can be located in another orphaned branch in the repo (which you can safely mark as default after the first publication).
 In addition to that default behaviour, you can configure the branch this plugin pushes into with the `target_branch`-option. Keep in mind to set the source branch accordingly at the GitHub Pages Settings page.
 
-Note that this is a rather simple (naive maybe) Docker based action. @limjh16 has created [a JS based version of this action](https://github.com/limjh16/jekyll-action-ts) which saves the container download time and might help with non default use cases.
+Note that this is a rather simple (naive maybe) Docker based action. @limjh16 has created [a JS based version of this action](https://github.com/limjh16/jekyll-action-ts) which saves the container download time and might help with non default use cases (such as but not limited to: specific package or library that is not available as a Gem).
 
 ## Usage
 
@@ -100,6 +100,9 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 
 ### Known Limitation
 Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile:
+
+### I have a problem
+Create a `ACTIONS_STEP_DEBUG` secret with value `true` and run the workflow again. 
 
 ### Note on custom domains
 If you're using a Custom Domain for your GitHub Pages site, you will need to ensure that the `CNAME` file exists in the repository root of the `main` (or `master`) branch so that it can be copied to the deployment root when your site is deployed.
