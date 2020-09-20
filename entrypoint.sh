@@ -6,7 +6,7 @@ echo "Starting the Jekyll Action"
 if [ -z "${JEKYLL_PAT}" ]; then
   echo "::error::No token provided. Please set the JEKYLL_PAT environment variable."
   exit 1
-fi 
+fi
 
 if [ -n "${INPUT_JEKYLL_SRC}" ]; then
   JEKYLL_SRC="${INPUT_JEKYLL_SRC}"
@@ -60,7 +60,7 @@ if [ "${JEKYLL_DEBUG}" = true ]; then
   # Activating debug for Jekyll
   echo "::debug::Jekyll debug is on"
   VERBOSE="--verbose"
-else 
+else
   echo "::debug::Jekyll debug is off"
 fi
 
@@ -72,6 +72,10 @@ cd build
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
 
+
+if [ "${INPUT_CUSTOM_DOMAIN}" -ne "" ]; then
+  echo "${INPUT_CUSTOM_DOMAIN}" > CNAME
+fi
 
 if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   remote_branch="${INPUT_TARGET_BRANCH}"
@@ -100,6 +104,6 @@ git add . && \
 git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
 git push --force $remote_repo master:$remote_branch && \
 rm -fr .git && \
-cd .. 
+cd ..
 
 exit $?
