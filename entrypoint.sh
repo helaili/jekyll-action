@@ -72,8 +72,7 @@ cd build
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
 
-
-if [ "${INPUT_CUSTOM_DOMAIN}" -ne "" ]; then
+if [ -n "${INPUT_CUSTOM_DOMAIN}" ]; then
   echo "${INPUT_CUSTOM_DOMAIN}" > CNAME
 fi
 
