@@ -5,7 +5,7 @@ LABEL repository="https://github.com/helaili/jekyll-action"
 LABEL homepage="https://github.com/helaili/jekyll-action"
 LABEL maintainer="Alain Hélaïli <helaili@github.com>"
 
-RUN apk add --no-cache git build-base
+RUN apk add --no-cache git build-base gsl-dev
 # Allow for timezone setting in _config.yml
 RUN apk add --update tzdata
 
