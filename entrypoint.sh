@@ -30,13 +30,13 @@ echo "::debug::Using \"${JEKYLL_SRC}\" as a source directory"
 if [ -n "${INPUT_GEM_SRC}" ]; then
   GEM_SRC="${INPUT_GEM_SRC}"
   echo "::debug::Gem directory is set via input parameter"
-elif [ -f "${JEKYLL_SRC}/Gemfile.lock" ]; then
+elif [ -f "${JEKYLL_SRC}/Gemfile" ]; then
   GEM_SRC="${JEKYLL_SRC}"
   echo "::debug::Gem directory is set via source directory"
 fi
 
 if [ -z "${GEM_SRC}" ]; then
-  GEM_SRC=$(find . -path '*/vendor/bundle' -prune -o -name Gemfile.lock -exec dirname {} \;)
+  GEM_SRC=$(find . -path '*/vendor/bundle' -prune -o -name Gemfile -exec dirname {} \;)
   GEM_FILES_COUNT=$(echo "$GEM_SRC" | wc -l)
   if [ "$GEM_FILES_COUNT" != "1" ]; then
     echo "::error::Found $GEM_FILES_COUNT Gemfiles! Please define which to use with input variable \"gem_src\""
