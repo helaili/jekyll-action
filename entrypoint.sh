@@ -67,6 +67,10 @@ fi
 JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${VERBOSE}
 echo "Jekyll build done"
 
+if [ "${INPUT_BUILD_ONLY}" = true ]; then
+  exit $?
+fi
+
 cd build
 
 # No need to have GitHub Pages to run Jekyll

@@ -10,6 +10,9 @@ inputs:
   target_branch:
     description: 'The target branch name the sources get pushed to'
     required: false
+  build_only:
+    description: 'Will build the Jekyll site without publishing it'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
