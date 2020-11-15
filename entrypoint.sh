@@ -52,6 +52,7 @@ cd $GEM_SRC
 
 bundle config set deployment true
 bundle config path "$PWD/vendor/bundle"
+echo "::debug::Bundle config set succesfully"
 bundle install
 echo "::debug::Completed bundle install"
 
