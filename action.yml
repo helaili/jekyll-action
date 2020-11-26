@@ -1,6 +1,9 @@
 name: 'Jekyll Actions'
 description: 'A GitHub Action to build and publish Jekyll sites to GitHub Pages'
 inputs:
+  jekyll_env:
+    description: 'The Jekyll environment to build'
+    required: false
   jekyll_src:  
     description: 'The Jekyll website source directory'
     required: false

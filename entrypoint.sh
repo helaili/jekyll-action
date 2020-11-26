@@ -48,6 +48,15 @@ if [ -z "${GEM_SRC}" ]; then
 fi
 echo "::debug::Using \"${GEM_SRC}\" as Gem directory"
 
+if [ -n "${INPUT_JEKYLL_ENV}" ]; then
+  JEKYLL_ENV="${INPUT_JEKYLL_ENV}"
+  echo "::debug::Environment is set via input parameter"
+else
+  JEKYLL_ENV=production
+  echo "::debug::Environment default in use - production"
+fi
+  
+
 cd $GEM_SRC
 
 bundle config path "$PWD/vendor/bundle"
@@ -64,7 +73,7 @@ else
   echo "::debug::Jekyll debug is off"
 fi
 
-JEKYLL_ENV=production bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
+bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
 echo "Jekyll build done"
 
 if [ "${INPUT_BUILD_ONLY}" = true ]; then
