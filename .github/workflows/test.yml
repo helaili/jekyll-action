@@ -34,6 +34,12 @@ jobs:
         target_branch: my_gh_pages_branch
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+    - name: Run with build_only
+      uses: ./
+      with: 
+        build_only: true
+      env:
+        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
     - name: Basic run
       uses: ./
       env:
