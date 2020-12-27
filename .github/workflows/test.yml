@@ -21,7 +21,7 @@ jobs:
     - name: Basic run
       uses: ./
       with:
-        jekyll_build_options: "--config _config.yml, _config_basic.yml"
+        jekyll_build_options: "--config ../sample_site/config.yml,../sample_site/_config_basic.yml"
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       
