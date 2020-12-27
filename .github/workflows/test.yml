@@ -7,7 +7,8 @@ env:
   URL: https://helaili.github.io/jekyll-action/
 
 jobs:
-  basic: 
+  
+  basic-publish: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -21,6 +22,11 @@ jobs:
       uses: ./
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      
+  basic-test: 
+    runs-on: ubuntu-latest
+    needs: basic-publish
+    steps:
     - name: Cypress run
       uses: cypress-io/github-action@v2.7.2
       with:
