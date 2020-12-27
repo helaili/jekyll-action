@@ -4,6 +4,9 @@ inputs:
   jekyll_src:  
     description: 'The Jekyll website source directory'
     required: false
+  jekyll_build_options:  
+    description: 'Additional Jekyll build arguments (see https://jekyllrb.com/docs/configuration/options/#build-command-options)'
+    required: false
   gem_src:
     description: 'The Jekyll Gemfile directory'
     required: false

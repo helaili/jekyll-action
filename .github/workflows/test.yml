@@ -20,6 +20,8 @@ jobs:
           ${{ runner.os }}-gems-\
     - name: Basic run
       uses: ./
+      with:
+        jekyll_build_options: "--config _config.yml, _config_basic.yml"
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       
