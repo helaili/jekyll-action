@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.1.0'
 gem 'coderay', '~> 1.1.0'
-gem 'jekyll-theme-minimal', '~> 0.1.1'
+gem 'alembic-jekyll-theme'
 
 
 group :jekyll_plugins do
