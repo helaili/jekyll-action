@@ -1,4 +1,4 @@
 it('works', () => {
-  expect(42).to.equal(21 + 21)
   cy.visit('/jekyll-action/')
+  cy.get('body main div header h1').should('contain', 'Jekyll AsciiDoc Action - Basic')
 })
