@@ -1,0 +1,15 @@
+{
+  "name": "jekyll-action",
+  "version": "1.0.0",
+  "description": "Test Pages deploy with Jekyll Action",
+  "main": "index.js",
+  "scripts": {
+    "test": "CYPRESS_BASE_URL=https://helaili.github.io cypress run"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "cypress": "6.0.0"
+  }
+}

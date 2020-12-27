@@ -3,8 +3,11 @@ name: Testing the GitHub Pages publication
 on:
   push
     
+env:
+  URL: https://helaili.github.io/jekyll-action/
+
 jobs:
-  jekyll:
+  basic: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -14,27 +17,24 @@ jobs:
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           ${{ runner.os }}-gems-\
-    - name: Run with jekyll_src
-      uses: ./
-      with: 
-        jekyll_src: sample_site
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-        JEKYLL_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
-    - name: Run with jekyll_src and gem_src
-      uses: ./
-      with: 
-        jekyll_src: sample_site
-        gem_src: sample_site_gemfiles
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-    - name: Run with target_branch
-      uses: ./
-      with: 
-        target_branch: my_gh_pages_branch
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
     - name: Basic run
       uses: ./
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+    - name: Cypress run
+      uses: cypress-io/github-action@v2.7.2
+      with:
+        config: baseUrl=https://helaili.github.io
+    - name: Save Cypress Screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+    - name: Save Cypress Videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/videos
