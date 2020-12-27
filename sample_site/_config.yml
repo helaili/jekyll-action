@@ -3,6 +3,7 @@ description: A GitHub Action to publish AsciiDoc content as a GitHub Pages site
 author: Alain Helaili
 email: helaili@github.com
 timezone: 'Europe/Paris'
+baseurl: '/jekyll-action'
 exclude:
   - LICENSE.adoc
   - README.adoc
@@ -21,7 +22,7 @@ show_description: false # show blog description in home page
 
 sass:
   style: :compressed
-    
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
