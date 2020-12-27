@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.1.0'
 gem 'coderay', '~> 1.1.0'
-gem 'alembic-jekyll-theme'
-
+gem 'jekyll-remote-theme'
 
 group :jekyll_plugins do
   gem 'jekyll-asciidoc', '~> 3.0.0'

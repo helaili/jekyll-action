@@ -1,5 +1,5 @@
 title: Jekyll AsciiDoc Action
-theme: alembic-jekyll-theme
+remote_theme: daviddarnes/alembic
 description: A GitHub Action to publish AsciiDoc content as a GitHub Pages site
 author: Alain Helaili
 email: helaili@github.com
@@ -14,3 +14,5 @@ asciidoctor:
     - idseparator=_
     - source-highlighter=coderay
     - icons=font
+plugins:
+  - "jekyll-remote-theme"
