@@ -1,3 +1,10 @@
+= Sample AsciiDoc site built with a Jekyll Action
+:icons: font
+:showtitle:
+:sourcedir: ..
+:page-title: Sample Site
+:page-description: Home of a sample AsciiDoc site for the Jekyll Action.
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/helaili/test-pages/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
