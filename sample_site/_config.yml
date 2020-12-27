@@ -21,7 +21,7 @@ show_description: false # show blog description in home page
 
 sass:
   style: :compressed
-
+    
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
