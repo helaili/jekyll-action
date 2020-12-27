@@ -4,3 +4,7 @@ build/*
 **/videos/*
 .env
 
+.jekyll-cache
+_site
+
+.DS_Store
