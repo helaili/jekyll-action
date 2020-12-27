@@ -25,6 +25,7 @@ jobs:
       uses: cypress-io/github-action@v2.7.2
       with:
         config: baseUrl=https://helaili.github.io
+        working-directory: tests/e2e
     - name: Save Cypress Screenshots
       uses: actions/upload-artifact@v2
       if: failure()
