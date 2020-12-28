@@ -63,7 +63,7 @@ jobs:
     - uses: actions/checkout@v2
 
     # Use GitHub Actions' cache to shorten build times and decrease load on servers
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}

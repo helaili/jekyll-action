@@ -3,38 +3,209 @@ name: Testing the GitHub Pages publication
 on:
   push
     
+env:
+  URL: https://helaili.github.io/jekyll-action/
+
 jobs:
-  jekyll:
+  basic-publish: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2
       with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
-          ${{ runner.os }}-gems-\
-    - name: Run with jekyll_src
-      uses: ./
-      with: 
-        jekyll_src: sample_site
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-        JEKYLL_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }}
-    - name: Run with jekyll_src and gem_src
-      uses: ./
-      with: 
-        jekyll_src: sample_site
-        gem_src: sample_site_gemfiles
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-    - name: Run with target_branch
-      uses: ./
-      with: 
-        target_branch: my_gh_pages_branch
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+          gems
     - name: Basic run
       uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_basic.yml"
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      
+  basic-test: 
+    runs-on: ubuntu-latest
+    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish]
+    steps:
+    - name: Set the GH Pages branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}}
+        script: |
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "gh-pages",
+              path: "/"
+            }
+          })
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+    - uses: actions/checkout@v2
+    - name: Caching
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Cypress run
+      uses: cypress-io/github-action@v2.7.2
+      with:
+        config: baseUrl=https://helaili.github.io
+        working-directory: tests/e2e
+        spec: cypress/integration/basic/**/*
+    - name: Save Cypress Screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+    - name: Save Cypress Videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/videos
+
+  jekyll-src-publish: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
+        restore-keys: |
+          gems
+    - name: Basic run
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_src.yml"
+        jekyll_src: sample_site
+        target_branch: jekyll_src_test_pages_branch
+      env:
+        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      
+  jekyll-src-test: 
+    runs-on: ubuntu-latest
+    needs: basic-test
+    steps:
+    - name: Set the GH Pages branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}}
+        script: |
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "jekyll_src_test_pages_branch",
+              path: "/"
+            }
+          })
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+    - uses: actions/checkout@v2
+    - name: Caching
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Cypress run
+      uses: cypress-io/github-action@v2.7.2
+      with:
+        config: baseUrl=https://helaili.github.io
+        working-directory: tests/e2e
+        spec: cypress/integration/jekyll_src/**/*
+    - name: Save Cypress Screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+    - name: Save Cypress Videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/videos
+  
+  jekyll-gem-src-publish: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
+        restore-keys: |
+          gems
+    - name: Basic run
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_gem_src.yml"
+        jekyll_src: sample_site
+        gem_src: sample_site_gemfiles
+        target_branch: jekyll_gem_src_test_pages_branch
+      env:
+        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      
+  jekyll-gem-src-test: 
+    runs-on: ubuntu-latest
+    needs: jekyll-src-test
+    steps:
+    - name: Set the GH Pages branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}}
+        script: |
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "jekyll_gem_src_test_pages_branch",
+              path: "/"
+            }
+          })
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+    - uses: actions/checkout@v2
+    - name: Caching
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Cypress run
+      uses: cypress-io/github-action@v2.7.2
+      with:
+        config: baseUrl=https://helaili.github.io
+        working-directory: tests/e2e
+        spec: cypress/integration/jekyll_gem_src/**/*
+    - name: Save Cypress Screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+    - name: Save Cypress Videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/videos

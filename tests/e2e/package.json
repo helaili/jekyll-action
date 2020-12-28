@@ -1,0 +1,17 @@
+{
+  "name": "jekyll-action",
+  "version": "1.0.0",
+  "description": "Test Pages deploy with Jekyll Action",
+  "main": "index.js",
+  "scripts": {
+    "test": "CYPRESS_BASE_URL=https://helaili.github.io cypress run",
+    "serve-local-basic": "cd ../../sample_site_gemfiles && bundle install && bundle exec jekyll serve -s ../sample_site --config ../sample_site/_config.yml,../sample_site/_config_basic.yml --trace",
+    "test-local-basic": "CYPRESS_BASE_URL=http://localhost:4000 cypress run"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "cypress": "6.0.0"
+  }
+}

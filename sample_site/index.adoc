@@ -1,20 +1,9 @@
+---
+layout: home
+---
 = Sample AsciiDoc site built with a Jekyll Action
 :icons: font
 :showtitle:
-:toc: right
 :sourcedir: ..
 :page-title: Sample Site
 :page-description: Home of a sample AsciiDoc site for the Jekyll Action.
-
-== What's in the site????
-
-So many awesome things! test without a PAT
-
-[source,YAML]
-----
-include::{sourcedir}/.github/workflows/test.yml[lines=1]
-----
-
-:source-highlighter: pygments
-:pygments-style: manni
-:pygments-linenums-mode: inline
