@@ -7,9 +7,26 @@ env:
   URL: https://helaili.github.io/jekyll-action/
 
 jobs:
+  set-pages-defaults:
+    name: Set GitHub Pages params
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}}
+        script: |
+          github.repos.createPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "gh-pages",
+              path: "/"
+            }
+          })
   
   basic-publish: 
     runs-on: ubuntu-latest
+    needs: set-pages-defaults
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
