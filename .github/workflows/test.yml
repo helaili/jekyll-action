@@ -21,7 +21,7 @@ jobs:
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_basic.yml"
-        jekyll_env: "development"
+        jekyll_env: development
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       
@@ -90,9 +90,10 @@ jobs:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_src.yml"
         jekyll_src: sample_site
         target_branch: jekyll_src_test_pages_branch
-        jekyll_env: "production"
+        jekyll_env: production
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_DEBUG: true
       
   jekyll-src-test: 
     runs-on: ubuntu-latest
