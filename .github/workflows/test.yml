@@ -41,6 +41,10 @@ jobs:
               path: "/"
             }
           })
+          github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
     - uses: actions/checkout@v2
     - name: Caching
       uses: actions/cache@v1
@@ -104,6 +108,10 @@ jobs:
               branch: "jekyll_src_test_pages_branch",
               path: "/"
             }
+          })
+          github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
           })
     - uses: actions/checkout@v2
     - name: Caching
@@ -169,6 +177,10 @@ jobs:
               branch: "jekyll_gem_src_test_pages_branch",
               path: "/"
             }
+          })
+          github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
           })
     - uses: actions/checkout@v2
     - name: Caching
