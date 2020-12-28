@@ -15,7 +15,7 @@ jobs:
       with:
         github-token: ${{secrets.JEKYLL_PAT}}
         script: |
-          github.repos.createPagesSite({
+          github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
             repo: context.repo.repo,
             source: {
