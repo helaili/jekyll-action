@@ -21,6 +21,7 @@ jobs:
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_basic.yml"
+        jekyll_env: "development"
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       
