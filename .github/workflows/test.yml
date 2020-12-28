@@ -14,9 +14,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+        key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
-          ${{ runner.os }}-gems-\
+          gems
     - name: Basic run
       uses: ./
       with:
@@ -80,9 +80,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+        key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
-          ${{ runner.os }}-gems-\
+          gems
     - name: Basic run
       uses: ./
       with:
@@ -148,9 +148,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+        key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
-          ${{ runner.os }}-gems-\
+          gems
     - name: Basic run
       uses: ./
       with:
