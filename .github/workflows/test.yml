@@ -110,7 +110,7 @@ jobs:
   
   jekyll-gem-src-publish: 
     runs-on: ubuntu-latest
-    needs: basic-test
+    needs: jekyll-src-test
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
