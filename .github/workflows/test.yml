@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -47,7 +47,7 @@ jobs:
           })
     - uses: actions/checkout@v2
     - name: Caching
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -115,7 +115,7 @@ jobs:
           })
     - uses: actions/checkout@v2
     - name: Caching
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -145,7 +145,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -184,7 +184,7 @@ jobs:
           })
     - uses: actions/checkout@v2
     - name: Caching
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
