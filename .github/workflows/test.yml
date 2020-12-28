@@ -93,6 +93,7 @@ jobs:
         jekyll_env: "production"
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_DEBUG: true
       
   jekyll-src-test: 
     runs-on: ubuntu-latest
