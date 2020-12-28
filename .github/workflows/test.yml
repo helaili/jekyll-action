@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
-        path: vendor/bundle
+        path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
@@ -79,7 +79,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
-        path: vendor/bundle
+        path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
@@ -147,7 +147,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
-        path: vendor/bundle
+        path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
