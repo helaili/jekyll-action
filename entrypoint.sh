@@ -48,14 +48,14 @@ if [ -z "${GEM_SRC}" ]; then
 fi
 echo "::debug::Using \"${GEM_SRC}\" as Gem directory"
 
+JEKYLL_ENV=production
 if [ -n "${INPUT_JEKYLL_ENV}" ]; then
   JEKYLL_ENV="${INPUT_JEKYLL_ENV}"
   echo "::debug::Environment is set via input parameter"
 else
-  JEKYLL_ENV=production
   echo "::debug::Environment default in use - production"
-fi
-  
+fi  
+echo "::debug::JEKYLL_ENV=${JEKYLL_ENV}"
 
 cd $GEM_SRC
 
