@@ -33,7 +33,7 @@ jobs:
       with:
         github-token: ${{secrets.JEKYLL_PAT}}
         script: |
-          github.repos.updateInformationAboutPagesSite({
+          await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
             repo: context.repo.repo,
             source: {
@@ -41,7 +41,7 @@ jobs:
               path: "/"
             }
           })
-          github.repos.requestPagesBuild({
+          await github.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
@@ -101,7 +101,7 @@ jobs:
       with:
         github-token: ${{secrets.JEKYLL_PAT}}
         script: |
-          github.repos.updateInformationAboutPagesSite({
+          await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
             repo: context.repo.repo,
             source: {
@@ -109,7 +109,7 @@ jobs:
               path: "/"
             }
           })
-          github.repos.requestPagesBuild({
+          await github.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
@@ -170,7 +170,7 @@ jobs:
       with:
         github-token: ${{secrets.JEKYLL_PAT}}
         script: |
-          github.repos.updateInformationAboutPagesSite({
+          await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
             repo: context.repo.repo,
             source: {
@@ -178,7 +178,7 @@ jobs:
               path: "/"
             }
           })
-          github.repos.requestPagesBuild({
+          await github.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
