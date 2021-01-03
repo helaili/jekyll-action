@@ -98,13 +98,33 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 
 ![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
 
-### Known Limitation
+## Inputs
+
+### jekyll_env
+The Jekyll environment to build (default to `production`)
+
+### jekyll_src
+The Jekyll website source directory
+
+### jekyll_build_options
+Additional Jekyll build arguments (see [the Jekyll doc](https://jekyllrb.com/docs/configuration/options/#build-command-options))
+
+### gem_src
+The Jekyll Gemfile directory
+
+### target_branch
+The target branch name the sources get pushed to
+
+### build_only
+When set to `true`, the Jekyll site will be built but not published
+
+## Known Limitation
 Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile:
 
-### I have a problem
+## I have a problem
 Create a `ACTIONS_STEP_DEBUG` secret with value `true` and run the workflow again. 
 
-### Note on custom domains
+## Note on custom domains
 If you're using a Custom Domain for your GitHub Pages site, you will need to ensure that the `CNAME` file exists in the repository root of the `main` (or `master`) branch so that it can be copied to the deployment root when your site is deployed.
 
 If your GitHub Pages site is run off the `main` (or `master`) branch, you can modify the Custom Domain setting in the Repository Settings to automatically generate and commit the `CNAME` file.
