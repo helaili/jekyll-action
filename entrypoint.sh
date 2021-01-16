@@ -3,7 +3,7 @@ set -e
 
 echo "Starting the Jekyll Action"
 
-if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]
+if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
   echo "Execute pre-build commands specified by the user."
   eval "$INPUT_PRE_BUILD_COMMANDS"
 fi 
