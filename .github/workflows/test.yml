@@ -23,6 +23,7 @@ jobs:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_basic.yml"
         jekyll_env: development
         build_only: false
+        pre_build_commands: apk --update add imagemagick nodejs
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       
