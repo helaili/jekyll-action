@@ -8,12 +8,12 @@ if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
   eval "$INPUT_PRE_BUILD_COMMANDS"
 fi 
 
-if [ -z "${INPUT_TOKEN}" && -n "${JEKYLL_PAT}"]; then
+if [ -z "${INPUT_TOKEN}" -a -n "${JEKYLL_PAT}"]; then
   echo "::warning::The JEKYLL_PAT environment variable is deprecated. Please use the token parameter"
   INPUT_TOKEN=${JEKYLL_PAT}
 fi
 
-if [ -z "${INPUT_TOKEN}" && "${INPUT_BUILD_ONLY}" != true ]; then
+if [ -z "${INPUT_TOKEN}" -a "${INPUT_BUILD_ONLY}" != true ]; then
   echo "::error::No token provided. Please set the token parameter."
   exit 1
 fi 
