@@ -45,7 +45,7 @@ asciidoctor:
 Note that we also renamed `index.html` to `index.adoc` and modified this file accordingly in order to leverage AsciiDoc.
 
 ### Use the action
-Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to a `JEKYLL_PAT` secret set with a Personal Access Token (needs ` public_repo` scope). The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `jekyll_src` parameter (`sample_site` for us). The `SRC` environment variable is also supported for backward compatibilty but it is deprecated.
+Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to the out-of-the-box `GITHUB_TOKEN` secret. The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `jekyll_src` parameter (`sample_site` for us). The `SRC` environment variable is also supported for backward compatibilty but it is deprecated.
 The action will search for Gemfile location. If your want to specify it explicitly (e.g. if you have multiple Gemfiles per project), you should update `gem_src` input parameter accordingly.
 
 Use the `actions/cache` action in the workflow as well, to shorten build times and decrease load on GitHub's servers
@@ -72,21 +72,19 @@ jobs:
 
     # Standard usage
     - uses:  helaili/jekyll-action@v2
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # Specify the Jekyll source location as a parameter
     - uses: helaili/jekyll-action@v2
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         jekyll_src: 'sample_site'
 
     # Specify the target branch (optional)
     - uses: helaili/jekyll-action@v2
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         target_branch: 'gh-pages'
 ```
 
@@ -99,6 +97,9 @@ Just click on the *_View deployment_* button of the `github-pages` environment t
 ![image](https://user-images.githubusercontent.com/2787414/51083411-188d1b00-171a-11e9-9a25-f8b06f33053e.png)
 
 ## Inputs
+
+### token
+The `GITHUB_TOKEN` secret. This is mandatory unless `build_only` is set to `true`. 
 
 ### jekyll_env
 The Jekyll environment to build (default to `production`)
@@ -121,8 +122,8 @@ When set to `true`, the Jekyll site will be built but not published
 ### pre_build_commands
 Commands to run prior to build and deploy. Useful for ensuring build dependencies are up to date or installing new dependencies. For example, use `apk --update add imagemagick` to install ImageMagick.
 
-## Known Limitation
-Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile:
+## Deprecation
+This action previously used a `JEKYLL_PAT` environment variable instead of the `token` parameter. This is now depreacted. 
 
 ## I have a problem
 Create a `ACTIONS_STEP_DEBUG` secret with value `true` and run the workflow again. 
