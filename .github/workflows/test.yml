@@ -24,8 +24,7 @@ jobs:
         jekyll_env: development
         build_only: false
         pre_build_commands: apk --update add imagemagick nodejs
-      env:
-        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
       
   basic-test: 
     runs-on: ubuntu-latest
@@ -162,8 +161,7 @@ jobs:
         jekyll_src: sample_site
         gem_src: sample_site_gemfiles
         target_branch: jekyll_gem_src_test_pages_branch
-      env:
-        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
       
   jekyll-gem-src-test: 
     runs-on: ubuntu-latest
