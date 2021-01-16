@@ -8,8 +8,13 @@ if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
   eval "$INPUT_PRE_BUILD_COMMANDS"
 fi 
 
-if [ -z "${JEKYLL_PAT}" ]; then
-  echo "::error::No token provided. Please set the JEKYLL_PAT environment variable."
+if [ -z "${INPUT_TOKEN}" ] && [ -n "${JEKYLL_PAT}" ]; then
+  echo "::warning::The JEKYLL_PAT environment variable is deprecated. Please use the token parameter"
+  INPUT_TOKEN=${JEKYLL_PAT}
+fi
+
+if [ -z "${INPUT_TOKEN}" ] && [ "${INPUT_BUILD_ONLY}" != true ]; then
+  echo "::error::No token provided. Please set the token parameter."
   exit 1
 fi 
 
@@ -106,9 +111,9 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
-echo "::debug::Pushing to https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+echo "::debug::Pushing to https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
-remote_repo="https://${JEKYLL_PAT}@github.com/${GITHUB_REPOSITORY}.git" && \
+remote_repo="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
 git init && \
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
