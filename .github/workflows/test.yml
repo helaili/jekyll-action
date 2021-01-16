@@ -25,7 +25,7 @@ jobs:
         build_only: false
         pre_build_commands: apk --update add imagemagick nodejs
       env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
       
   basic-test: 
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.JEKYLL_PAT}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -94,7 +94,7 @@ jobs:
         target_branch: jekyll_src_test_pages_branch
         jekyll_env: production
       env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
       
   jekyll-src-test: 
@@ -104,7 +104,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.JEKYLL_PAT}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -163,7 +163,7 @@ jobs:
         gem_src: sample_site_gemfiles
         target_branch: jekyll_gem_src_test_pages_branch
       env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
       
   jekyll-gem-src-test: 
     runs-on: ubuntu-latest
@@ -172,7 +172,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.JEKYLL_PAT}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -230,7 +230,7 @@ jobs:
         jekyll_env: development
         build_only: true
       env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
 
   build-only-test: 
     runs-on: ubuntu-latest
@@ -239,7 +239,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.JEKYLL_PAT}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
