@@ -34,7 +34,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -104,7 +104,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -172,7 +172,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -239,7 +239,7 @@ jobs:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
