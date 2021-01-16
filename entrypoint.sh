@@ -1,10 +1,12 @@
 #!/bin/sh
 set -e
 
-echo "Execute pre-build commands specified by the user."
-[ ! -z "$INPUT_PRE_BUILD_COMMANDS" ] && eval "$INPUT_PRE_BUILD_COMMANDS"
-
 echo "Starting the Jekyll Action"
+
+if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
+  echo "Execute pre-build commands specified by the user."
+  eval "$INPUT_PRE_BUILD_COMMANDS"
+fi 
 
 if [ -z "${JEKYLL_PAT}" ]; then
   echo "::error::No token provided. Please set the JEKYLL_PAT environment variable."
