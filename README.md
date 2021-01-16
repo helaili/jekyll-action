@@ -118,6 +118,9 @@ The target branch name the sources get pushed to
 ### build_only
 When set to `true`, the Jekyll site will be built but not published
 
+### pre_build_commands
+Commands to run prior to build and deploy. Useful for ensuring build dependencies are up to date or installing new dependencies. For example, use `apk --update add imagemagick` to install ImageMagick.
+
 ## Known Limitation
 Publishing of the GitHub pages can fail when using the `GITHUB_TOKEN` secret as the value of the `JEKYLL_PAT` env variable, as opposed to a Personal Access Token set as a secret. But it might work too :smile:
 

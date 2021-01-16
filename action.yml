@@ -19,6 +19,13 @@ inputs:
   build_only:
     description: 'Will build the Jekyll site without publishing it'
     required: false
+  pre_build_commands:
+    description: >
+      Commands to run prior to build and deploy. Useful for
+      ensuring build dependencies are up to date or installing 
+      new dependencies. For example, use `apk --update add 
+      imagemagick` to install ImageMagick.
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
