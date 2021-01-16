@@ -229,8 +229,6 @@ jobs:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_build_only.yml"
         jekyll_env: development
         build_only: true
-      env:
-        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
 
   build-only-test: 
     runs-on: ubuntu-latest
