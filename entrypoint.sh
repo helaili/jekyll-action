@@ -87,7 +87,7 @@ cd ${BUILD_DIR}
 echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
 git clone --branch $remote_branch $REMOTE_REPO .
 
-cd $GEM_SRC
+cd "${GITHUB_WORKSPACE}/${GEM_SRC}"
 
 bundle config path "$PWD/vendor/bundle"
 echo "::debug::Bundle config set succesfully"
