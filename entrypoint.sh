@@ -93,16 +93,18 @@ else
 fi
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-echo "::debug::Remote is to ${REMOTE_REPO}"
+echo "::debug::Remote is ${REMOTE_REPO}"
+BUILD_DIR="${GITHUB_WORKSPACE}/../JEKYLL_BUILD"
+echo "::debug::Build dir is ${BUILD_DIR}"
 
-JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
+JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d ${BUILD_DIR} ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
 echo "Jekyll build done"
 
 if [ "${INPUT_BUILD_ONLY}" = true ]; then
   exit $?
 fi
 
-cd build
+cd ${BUILD_DIR}
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
