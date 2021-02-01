@@ -97,10 +97,6 @@ echo "::debug::Remote is ${REMOTE_REPO}"
 BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
 echo "::debug::Build dir is ${BUILD_DIR}"
 
-mkdir ${BUILD_DIR}
-cd ${BUILD_DIR}
-git init
-
 JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d ${BUILD_DIR} ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
 echo "Jekyll build done"
 
@@ -112,6 +108,9 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
   echo "::error::Cannot publish on branch ${remote_branch}"
   exit 1
 fi
+
+cd ${BUILD_DIR}
+git init
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
