@@ -80,6 +80,9 @@ REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITO
 echo "::debug::Remote is ${REMOTE_REPO}"
 BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
 echo "::debug::Build dir is ${BUILD_DIR}"
+LOCAL_BRANCH=$remote_branch
+#LOCAL_BRANCH="master"
+echo "::debug::Local branch is ${LOCAL_BRANCH}"
 
 mkdir ${BUILD_DIR} 
 cd ${BUILD_DIR}
@@ -126,7 +129,7 @@ git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
 git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push --force $REMOTE_REPO master:$remote_branch && \
+git push --force $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
 rm -fr .git && \
 cd .. 
 
