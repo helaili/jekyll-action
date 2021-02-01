@@ -112,7 +112,7 @@ fi
 cd ${BUILD_DIR}
 # git init
 echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
-git clone --branch $remote_branch $REMOTE_REPO
+git clone --branch $remote_branch $REMOTE_REPO .
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
