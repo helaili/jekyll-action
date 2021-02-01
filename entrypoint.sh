@@ -110,7 +110,8 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 cd ${BUILD_DIR}
-git init
+# git init
+git clone --branch $remote_branch $REMOTE_REPO
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
