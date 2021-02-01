@@ -65,6 +65,17 @@ else
   INPUT_JEKYLL_ENV="production"
 fi  
 
+REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+echo "::debug::Remote is ${REMOTE_REPO}"
+BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
+echo "::debug::Build dir is ${BUILD_DIR}"
+
+mkdir ${BUILD_DIR} 
+cd ${BUILD_DIR}
+# git init
+echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
+git clone --branch $remote_branch $REMOTE_REPO .
+
 cd $GEM_SRC
 
 bundle config path "$PWD/vendor/bundle"
@@ -92,11 +103,6 @@ else
   esac
 fi
 
-REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-echo "::debug::Remote is ${REMOTE_REPO}"
-BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
-echo "::debug::Build dir is ${BUILD_DIR}"
-
 JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d ${BUILD_DIR} ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
 echo "Jekyll build done"
 
@@ -110,9 +116,6 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 cd ${BUILD_DIR}
-# git init
-echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
-git clone --branch $remote_branch $REMOTE_REPO .
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
