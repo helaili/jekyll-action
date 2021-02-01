@@ -97,6 +97,7 @@ echo "::debug::Remote is ${REMOTE_REPO}"
 BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
 echo "::debug::Build dir is ${BUILD_DIR}"
 
+mkdir ${BUILD_DIR}
 cd ${BUILD_DIR}
 git init
 
