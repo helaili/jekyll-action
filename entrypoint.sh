@@ -80,15 +80,22 @@ REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITO
 echo "::debug::Remote is ${REMOTE_REPO}"
 BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
 echo "::debug::Build dir is ${BUILD_DIR}"
-LOCAL_BRANCH=$remote_branch
-#LOCAL_BRANCH="master"
-echo "::debug::Local branch is ${LOCAL_BRANCH}"
 
-mkdir ${BUILD_DIR} 
-cd ${BUILD_DIR}
-# git init
-echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
-git clone --branch $remote_branch $REMOTE_REPO .
+mkdir $BUILD_DIR
+cd $BUILD_DIR
+
+LOCAL_BRANCH="main"
+
+if [ "${INPUT_KEEP_HISTORY}" = true ]; then
+  echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
+  git clone --branch $remote_branch $REMOTE_REPO .
+  LOCAL_BRANCH=$remote_branch
+else 
+  echo "::debug::Initializing new repo"
+  git init -b $LOCAL_BRANCH
+fi
+
+echo "::debug::Local branch is ${LOCAL_BRANCH}"
 
 cd "${GITHUB_WORKSPACE}/${GEM_SRC}"
 
