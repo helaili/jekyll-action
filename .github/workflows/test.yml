@@ -285,6 +285,8 @@ jobs:
         ref: keep_history_test_pages_branch
     - run: | 
         echo "<html><body>hello</body></html>" > hello.html
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
         git add .
         git commit --allow-empty -m "adding a new file"
         git push origin keep_history_test_pages_branch
