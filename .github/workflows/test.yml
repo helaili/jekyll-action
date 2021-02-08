@@ -281,6 +281,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: keep_history_test_pages_branch
+    - run: | 
+        echo "<html><body>hello</body></html>" > hello.html
+        git add .
+        git commit --allow-empty -m "adding a new file"
+        git push origin keep_history_test_pages_branch
+    - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
         path: sample_site_gemfiles/vendor/bundle
@@ -293,7 +301,10 @@ jobs:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_keep_history.yml"
         jekyll_src: sample_site
         target_branch: keep_history_test_pages_branch
+        keep_history: true
         token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v2
+
       
   keep-history-test: 
     runs-on: ubuntu-latest
