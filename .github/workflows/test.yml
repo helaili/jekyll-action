@@ -28,7 +28,7 @@ jobs:
       
   basic-test: 
     runs-on: ubuntu-latest
-    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish]
+    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish, keep-history-publish]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
@@ -290,6 +290,7 @@ jobs:
         git add .
         git commit --allow-empty -m "adding a new file"
         git push origin keep_history_test_pages_branch
+        rm -rf *
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
