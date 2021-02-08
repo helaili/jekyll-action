@@ -310,8 +310,6 @@ jobs:
         target_branch: keep_history_test_pages_branch
         keep_history: true
         token: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/checkout@v2
-
       
   keep-history-test: 
     runs-on: ubuntu-latest
