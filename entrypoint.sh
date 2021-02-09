@@ -88,12 +88,14 @@ if [ "${INPUT_KEEP_HISTORY}" = true ]; then
   echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
   git clone --branch $remote_branch $REMOTE_REPO .
   LOCAL_BRANCH=$remote_branch
+  PUSH_OPTIONS=""
   COMMIT_OPTIONS="--allow-empty"
 else 
   echo "::debug::Initializing new repo"
   LOCAL_BRANCH="main"
   git init -b $LOCAL_BRANCH
-  COMMIT_OPTIONS="--force"
+  PUSH_OPTIONS="--force"
+  COMMIT_OPTIONS=""
 fi
 
 echo "::debug::Local branch is ${LOCAL_BRANCH}"
@@ -136,8 +138,8 @@ echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
-git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push $COMMIT_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
+git commit $COMMIT_OPTIONS -m "jekyll build from Action ${GITHUB_SHA}" && \
+git push $PUSH_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
 rm -fr .git && \
 cd .. 
 
