@@ -84,15 +84,16 @@ echo "::debug::Build dir is ${BUILD_DIR}"
 mkdir $BUILD_DIR
 cd $BUILD_DIR
 
-LOCAL_BRANCH="main"
-
 if [ "${INPUT_KEEP_HISTORY}" = true ]; then
   echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
   git clone --branch $remote_branch $REMOTE_REPO .
   LOCAL_BRANCH=$remote_branch
+  COMMIT_OPTIONS="--allow-empty"
 else 
   echo "::debug::Initializing new repo"
   git init -b $LOCAL_BRANCH
+  LOCAL_BRANCH="main"
+  COMMIT_OPTIONS="--force"
 fi
 
 echo "::debug::Local branch is ${LOCAL_BRANCH}"
@@ -136,7 +137,7 @@ git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
 git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push --force $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
+git push $COMMIT_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
 rm -fr .git && \
 cd .. 
 
