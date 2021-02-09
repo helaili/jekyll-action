@@ -122,6 +122,13 @@ When set to `true`, the Jekyll site will be built but not published
 ### pre_build_commands
 Commands to run prior to build and deploy. Useful for ensuring build dependencies are up to date or installing new dependencies. For example, use `apk --update add imagemagick` to install ImageMagick.
 
+### keep_history 
+When set to `true`, previous version of the site will be restored before the Jekyll build takes place. You can then use [the `keep_files` option](https://jekyllrb.com/docs/configuration/options/#global-configuration) in your `_config.yml` file to select the files you want to keep. Make sure you then keep at least the `.git` folder. This option will also remove the `--force` flag from the `git commit...` command.  
+
+```yml
+keep_files: [.git, hello.html]
+```
+
 ## Deprecation
 This action previously used a `JEKYLL_PAT` environment variable instead of the `token` parameter. This is now depreacted. 
 

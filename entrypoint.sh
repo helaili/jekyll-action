@@ -65,7 +65,42 @@ else
   INPUT_JEKYLL_ENV="production"
 fi  
 
-cd $GEM_SRC
+if [ -n "${INPUT_TARGET_BRANCH}" ]; then
+  remote_branch="${INPUT_TARGET_BRANCH}"
+  echo "::debug::target branch is set via input parameter"
+else
+  # Is this a regular repo or an org.github.io type of repo
+  case "${GITHUB_REPOSITORY}" in
+    *.github.io) remote_branch="master" ;;
+    *)           remote_branch="gh-pages" ;;
+  esac
+fi
+
+REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+echo "::debug::Remote is ${REMOTE_REPO}"
+BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
+echo "::debug::Build dir is ${BUILD_DIR}"
+
+mkdir $BUILD_DIR
+cd $BUILD_DIR
+
+if [ "${INPUT_KEEP_HISTORY}" = true ]; then
+  echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
+  git clone --branch $remote_branch $REMOTE_REPO .
+  LOCAL_BRANCH=$remote_branch
+  PUSH_OPTIONS=""
+  COMMIT_OPTIONS="--allow-empty"
+else 
+  echo "::debug::Initializing new repo"
+  LOCAL_BRANCH="main"
+  git init -b $LOCAL_BRANCH
+  PUSH_OPTIONS="--force"
+  COMMIT_OPTIONS=""
+fi
+
+echo "::debug::Local branch is ${LOCAL_BRANCH}"
+
+cd "${GITHUB_WORKSPACE}/${GEM_SRC}"
 
 bundle config path "$PWD/vendor/bundle"
 echo "::debug::Bundle config set succesfully"
@@ -81,28 +116,11 @@ else
   echo "::debug::Jekyll debug is off"
 fi
 
-JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d build ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
+JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d ${BUILD_DIR} ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
 echo "Jekyll build done"
 
 if [ "${INPUT_BUILD_ONLY}" = true ]; then
   exit $?
-fi
-
-cd build
-
-# No need to have GitHub Pages to run Jekyll
-touch .nojekyll
-
-
-if [ -n "${INPUT_TARGET_BRANCH}" ]; then
-  remote_branch="${INPUT_TARGET_BRANCH}"
-  echo "::debug::target branch is set via input parameter"
-else
-  # Is this a regular repo or an org.github.io type of repo
-  case "${GITHUB_REPOSITORY}" in
-    *.github.io) remote_branch="master" ;;
-    *)           remote_branch="gh-pages" ;;
-  esac
 fi
 
 if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
@@ -110,16 +128,18 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
   exit 1
 fi
 
-echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
-echo "::debug::Pushing to https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+cd ${BUILD_DIR}
 
-remote_repo="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
-git init && \
+# No need to have GitHub Pages to run Jekyll
+touch .nojekyll
+
+echo "Publishing to ${GITHUB_REPOSITORY} on branch ${remote_branch}"
+
 git config user.name "${GITHUB_ACTOR}" && \
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
-git commit -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push --force $remote_repo master:$remote_branch && \
+git commit $COMMIT_OPTIONS -m "jekyll build from Action ${GITHUB_SHA}" && \
+git push $PUSH_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
 rm -fr .git && \
 cd .. 
 

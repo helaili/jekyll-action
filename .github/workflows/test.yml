@@ -28,7 +28,7 @@ jobs:
       
   basic-test: 
     runs-on: ubuntu-latest
-    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish]
+    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish, keep-history-publish]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
@@ -276,3 +276,88 @@ jobs:
       with:
         name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
         path: tests/e2e/videos
+  
+  keep-history-prepare: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: keep_history_test_pages_branch
+    - run: | 
+        echo "<html><body><p>hello</p><p>${GITHUB_RUN_ID}</p></body></html>" > hello.html
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
+        git add hello.html
+        git commit -m "adding a new file"
+        git push origin keep_history_test_pages_branch
+  
+  keep-history-publish: 
+    runs-on: ubuntu-latest
+    needs: keep-history-prepare
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
+        restore-keys: |
+          gems
+    - name: Keep history run
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_keep_history.yml"
+        jekyll_src: sample_site
+        target_branch: keep_history_test_pages_branch
+        keep_history: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+      
+  keep-history-test: 
+    runs-on: ubuntu-latest
+    needs: build-only-test
+    steps:
+    - name: Set the GH Pages branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
+        script: |
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "keep_history_test_pages_branch",
+              path: "/"
+            }
+          })
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+    - uses: actions/checkout@v2
+    - name: Caching
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Cypress run
+      uses: cypress-io/github-action@v2.7.2
+      with:
+        config: baseUrl=https://helaili.github.io
+        working-directory: tests/e2e
+        spec: cypress/integration/keep_history/**/*
+    - name: Save Cypress Screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+    - name: Save Cypress Videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/videos
+
+  
