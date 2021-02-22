@@ -135,10 +135,20 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
+    - name: Get the URL of the rendered site
+      id: rendered-site-url
+      run: |
+        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
+        awk -F'"' '/\"html_url\"/ { print $4 }')
+        url=$(dirname "${full_url}")
+        echo "::set-output name=url::${url}"
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
       uses: cypress-io/github-action@v2.7.2
       with:
-        config: baseUrl=https://helaili.github.io
+        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
         spec: cypress/integration/jekyll_src/**/*
     - name: Save Cypress Screenshots
@@ -202,10 +212,20 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
+    - name: Get the URL of the rendered site
+      id: rendered-site-url
+      run: |
+        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
+        awk -F'"' '/\"html_url\"/ { print $4 }')
+        url=$(dirname "${full_url}")
+        echo "::set-output name=url::${url}"
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
       uses: cypress-io/github-action@v2.7.2
       with:
-        config: baseUrl=https://helaili.github.io
+        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
         spec: cypress/integration/jekyll_gem_src/**/*
     - name: Save Cypress Screenshots
@@ -268,10 +288,20 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
+    - name: Get the URL of the rendered site
+      id: rendered-site-url
+      run: |
+        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
+        awk -F'"' '/\"html_url\"/ { print $4 }')
+        url=$(dirname "${full_url}")
+        echo "::set-output name=url::${url}"
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
       uses: cypress-io/github-action@v2.7.2
       with:
-        config: baseUrl=https://helaili.github.io
+        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
         # We're not publishing so the previous test should still pass
         spec: cypress/integration/jekyll_gem_src/**/*
@@ -351,10 +381,20 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
+    - name: Get the URL of the rendered site
+      id: rendered-site-url
+      run: |
+        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
+        awk -F'"' '/\"html_url\"/ { print $4 }')
+        url=$(dirname "${full_url}")
+        echo "::set-output name=url::${url}"
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
       uses: cypress-io/github-action@v2.7.2
       with:
-        config: baseUrl=https://helaili.github.io
+        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
         spec: cypress/integration/keep_history/**/*
     - name: Save Cypress Screenshots
