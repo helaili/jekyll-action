@@ -58,9 +58,10 @@ jobs:
     - name: Get the URL of the rendered site
       id: rendered-site-url
       run: |
-        url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
         "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
         awk -F'"' '/\"html_url\"/ { print $4 }')
+        url=$(dirname "${full_url}")
         echo "::set-output name=url::${url}"
       env:
         AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
