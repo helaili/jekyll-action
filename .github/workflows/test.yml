@@ -10,6 +10,23 @@ jobs:
   basic-publish: 
     runs-on: ubuntu-latest
     steps:
+    - name: Set the GH Pages branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
+        script: |
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "gh-pages",
+              path: "/"
+            }
+          })
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
