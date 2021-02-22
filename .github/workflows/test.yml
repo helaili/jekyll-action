@@ -58,12 +58,12 @@ jobs:
     - name: Get the URL of the rendered site
       id: rendered-site-url
       run: |
-        url=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
+        url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
         "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
         awk -F'"' '/\"html_url\"/ { print $4 }')
         echo "::set-output name=url::${url}"
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
       uses: cypress-io/github-action@v2.7.2
       with:
