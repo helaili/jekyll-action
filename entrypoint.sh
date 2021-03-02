@@ -109,7 +109,7 @@ fi
 
 echo "::debug::Build dir is ${BUILD_DIR}"
 
-mkdir $BUILD_DIR
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 if [ -n "${INPUT_TARGET_PATH}" ] && [ "${INPUT_TARGET_PATH}" != '/' ]; then
