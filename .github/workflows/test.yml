@@ -435,10 +435,10 @@ jobs:
       env:
         AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: | 
+        git config --global init.defaultBranch main
         git init
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
-        git config --global init.defaultBranch main
         echo "keep me" > .gitkeep
         git add .gitkeep
         git commit -m "[skip ci] intial commit"
