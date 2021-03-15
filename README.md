@@ -1,9 +1,9 @@
 # jekyll-action
 A GitHub Action to build and publish Jekyll sites to GitHub Pages
 
-Out-of-the-box Jekyll with GitHub Pages allows you to leverage a limited, white-listed, set of gems. Complex sites requiring custom ones or non white-listed ones (AsciiDoc for intstance) used to require a continuous integration build in order to pre-process the site.
+Out-of-the-box Jekyll with GitHub Pages allows you to leverage a limited, white-listed, set of gems. Complex sites requiring custom ones or non white-listed ones (AsciiDoc for instance) used to require a continuous integration build in order to pre-process the site.
 
-Remember that GitHub is serving your built static site, not it's sources. So when configuring GitHub Pages in your project settings, use **gh-pages branch** as a Source for GitHub Pages. If you are setting up *username*.github.io repository, you'll have to use **master branch**, so sources can be located in another orphaned branch in the repo (which you can safely mark as default after the first publication).
+Remember that GitHub is serving your built static site, not its sources. So when configuring GitHub Pages in your project settings, use **gh-pages branch** as a Source for GitHub Pages. If you are setting up *username*.github.io repository, you'll have to use **master branch**, so sources can be located in another orphaned branch in the repo (which you can safely mark as default after the first publication).
 In addition to that default behaviour, you can configure the branch this plugin pushes into with the `target_branch`-option. Keep in mind to set the source branch accordingly at the GitHub Pages Settings page.
 
 Note that this is a rather simple (naive maybe) Docker based action. @limjh16 has created [a JS based version of this action](https://github.com/limjh16/jekyll-action-ts) which saves the container download time and might help with non default use cases (such as but not limited to: specific package or library that is not available as a Gem).
@@ -11,7 +11,7 @@ Note that this is a rather simple (naive maybe) Docker based action. @limjh16 ha
 ## Usage
 
 ### Create a Jekyll site
-If you repo doesn't already have one, create a new Jekyll site:  `jekyll new sample-site`. See [the Jekyll website](https://jekyllrb.com/) for more information. In this repo, we have created a site within a `sample_site` folder within the repository because the repository's main goal is not to be a website. If it was the case, we would have created the site at the root of the repository.
+If your repo doesn't already have one, create a new Jekyll site:  `jekyll new sample-site`. See [the Jekyll website](https://jekyllrb.com/) for more information. In this repo, we have created a site within a `sample_site` folder within the repository because the repository's main goal is not to be a website. If it was the case, we would have created the site at the root of the repository.
 
 ### Create a `Gemfile`
 As you are using this action to leverage specific Gems, well, you need to declare them! In the sample below we are using [the Jekyll AsciiDoc plugin](https://github.com/asciidoctor/jekyll-asciidoc)
@@ -130,7 +130,7 @@ keep_files: [.git, hello.html]
 ```
 
 ## Deprecation
-This action previously used a `JEKYLL_PAT` environment variable instead of the `token` parameter. This is now depreacted. 
+This action previously used a `JEKYLL_PAT` environment variable instead of the `token` parameter. This is now deprecated. 
 
 ## I have a problem
 Create a `ACTIONS_STEP_DEBUG` secret with value `true` and run the workflow again. 
