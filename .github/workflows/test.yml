@@ -428,47 +428,49 @@ jobs:
         name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
         path: tests/e2e/videos
 
-  multiple-versions-publish: 
+  multiple-versions-prepare:
     runs-on: ubuntu-latest
     steps:
+    - name: Clean up branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ secrets.JEKYLL_PAT }}
+        script: |
+          github.git.deleteRef(
+            {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/heads/multiple_versions_test_pages_branch'
+            }
+          )
+    
+  multiple-versions-publish: 
+    runs-on: ubuntu-latest
+    needs: multiple-versions-prepare
+    strategy:
+      fail-fast: true
+      matrix: 
+        env: [
+          { path: '.', ref: 'refs/heads/master' },
+          { path: 'current', ref: 'refs/heads/master' },
+          { path: 'old', ref: 'refs/tags/test-old-version' }
+        ]
+    steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2
       with:
-        path: sample_site_gemfiles/vendor/bundle
-        key: gems-${{ hashFiles('**/Gemfile') }}
-        restore-keys: |
-          gems
-    - name: Basic run
-      uses: ./
-      with:
-        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
-        target_branch: multiple_versions_test_pages_branch
-        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ matrix.env.ref }}
     - name: Run with dest path
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
         target_branch: multiple_versions_test_pages_branch
         keep_history: true
-        target_path: "current"
+        target_path: ${{ matrix.env.path }}
         token: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/checkout@v2
-      with:
-        ref: 'refs/tags/test-old-version'
-    - name: Run with dest path for older version
-      uses: ./
-      with:
-        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
-        target_branch: multiple_versions_test_pages_branch
-        keep_history: true
-        target_path: "old"
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
-    
       
   multiple-versions-test: 
     runs-on: ubuntu-latest
-    needs: keep-history-test
+    needs: [keep-history-test, multiple-versions-publish]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
