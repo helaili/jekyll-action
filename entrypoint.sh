@@ -69,11 +69,14 @@ if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   remote_branch="${INPUT_TARGET_BRANCH}"
   echo "::debug::target branch is set via input parameter"
 else
-  # Is this a regular repo or an org.github.io type of repo
-  case "${GITHUB_REPOSITORY}" in
-    *.github.io) remote_branch="master" ;;
-    *)           remote_branch="gh-pages" ;;
-  esac
+  response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
+                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
+  remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
+  if [ -z "${remote_branch}" ]; then
+    echo "::error::Cannot get GitHub Pages source branch via API."
+    echo "::error::${response}"
+    exit 1
+  fi
 fi
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
