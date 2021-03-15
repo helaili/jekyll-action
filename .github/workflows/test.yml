@@ -430,6 +430,7 @@ jobs:
 
   multiple-versions-prepare:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - name: Clean up branch
       uses: actions/github-script@v3
