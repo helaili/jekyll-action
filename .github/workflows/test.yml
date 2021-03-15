@@ -439,7 +439,7 @@ jobs:
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
         echo "keep me" > .gitkeep
-        gita add .gitkeep
+        git add .gitkeep
         git commit "[skip ci] intial commit"
         git push --force https://${GITHUB_ACTOR}:${AUTH_TOKEN}/github.com/${GITHUB_REPOSITORY} multiple_versions_test_pages_branch
     
