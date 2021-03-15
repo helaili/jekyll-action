@@ -444,6 +444,14 @@ jobs:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
         target_branch: multiple_versions_test_pages_branch
         token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run with dest path
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
+        target_branch: multiple_versions_test_pages_branch
+        keep_history: true
+        target_path: "current"
+        token: ${{ secrets.GITHUB_TOKEN }}
       
   multiple-versions-test: 
     runs-on: ubuntu-latest
