@@ -440,7 +440,7 @@ jobs:
             {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/heads/multiple_versions_test_pages_branch'
+              ref: 'heads/multiple_versions_test_pages_branch'
             }
           )
     
