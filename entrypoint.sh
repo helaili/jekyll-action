@@ -86,7 +86,7 @@ echo "::debug::Build dir is ${BUILD_DIR}"
 mkdir $BUILD_DIR
 cd $BUILD_DIR
 
-if [ -n "${INPUT_TARGET_PATH}" ]; then
+if [ -n "${INPUT_TARGET_PATH}" ] && [ "${INPUT_TARGET_PATH}" != '/' ]; then
   TARGET_DIR="${BUILD_DIR}/${INPUT_TARGET_PATH}"
   echo "::debug::target path is set to ${INPUT_TARGET_PATH}"
 else

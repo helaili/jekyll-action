@@ -451,9 +451,9 @@ jobs:
       fail-fast: true
       matrix: 
         env: [
-          { path: '.', ref: 'refs/heads/master' },
-          { path: 'current', ref: 'refs/heads/master' },
-          { path: 'old', ref: 'refs/tags/test-old-version' }
+          { path: '/', ref: 'master' },
+          { path: 'current', ref: 'master' },
+          { path: 'old', ref: 'test-old-version' }
         ]
     steps:
     - uses: actions/checkout@v2
