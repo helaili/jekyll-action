@@ -452,8 +452,8 @@ jobs:
       fail-fast: true
       matrix: 
         env: [
-          { path: '/', ref: 'master' },
-          { path: 'current', ref: 'master' },
+          { path: '/', ref: 'ref-to-publish' },
+          { path: 'current', ref: 'ref-to-publish' },
           { path: 'old', ref: 'test-old-version' }
         ]
     steps:
