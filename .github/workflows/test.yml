@@ -438,10 +438,11 @@ jobs:
         git init
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
+        git config --global init.defaultBranch main
         echo "keep me" > .gitkeep
         git add .gitkeep
         git commit -m "[skip ci] intial commit"
-        git push --force https://${GITHUB_ACTOR}:${AUTH_TOKEN}/github.com/${GITHUB_REPOSITORY} multiple_versions_test_pages_branch
+        git push --force https://${GITHUB_ACTOR}:${AUTH_TOKEN}@github.com/${GITHUB_REPOSITORY} main:multiple_versions_test_pages_branch
     
   multiple-versions-publish: 
     runs-on: ubuntu-latest
