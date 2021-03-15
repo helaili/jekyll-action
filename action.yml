@@ -10,6 +10,10 @@ inputs:
   jekyll_src:  
     description: 'The Jekyll website source directory'
     required: false
+  ref_src:  
+    description: 'The git ref to use as a source'
+    required: false
+    default: 'HEAD'
   jekyll_build_options:  
     description: 'Additional Jekyll build arguments (see https://jekyllrb.com/docs/configuration/options/#build-command-options)'
     required: false
@@ -17,7 +21,10 @@ inputs:
     description: 'The Jekyll Gemfile directory'
     required: false
   target_branch:
-    description: 'The target branch name the sources get pushed to'
+    description: 'The target branch name the site gets pushed to'
+    required: false
+  target_path:
+    description: 'The relative path where the site gets pushed to'
     required: false
   build_only:
     description: 'Will build the Jekyll site without publishing it'

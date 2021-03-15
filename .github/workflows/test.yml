@@ -428,4 +428,79 @@ jobs:
         name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
         path: tests/e2e/videos
 
+  multiple-versions-publish: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
+        restore-keys: |
+          gems
+    - name: Basic run
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
+        target_branch: multiple_versions_test_pages_branch
+        token: ${{ secrets.GITHUB_TOKEN }}
+      
+  multiple-versions-test: 
+    runs-on: ubuntu-latest
+    needs: keep-history-test
+    steps:
+    - name: Set the GH Pages branch
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
+        script: |
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: "multiple_versions_test_pages_branch",
+              path: "/"
+            }
+          })
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+    - uses: actions/checkout@v2
+    - name: Caching
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Get the URL of the rendered site
+      id: rendered-site-url
+      run: |
+        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
+        awk -F'"' '/\"html_url\"/ { print $4 }')
+        url=$(dirname "${full_url}")
+        echo "::set-output name=url::${url}"
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Cypress run
+      uses: cypress-io/github-action@v2.7.2
+      with:
+        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
+        working-directory: tests/e2e
+        spec: cypress/integration/multiple/**/*
+    - name: Save Cypress Screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/screenshots
+    - name: Save Cypress Videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
+        path: tests/e2e/videos
+  
   
