@@ -452,6 +452,19 @@ jobs:
         keep_history: true
         target_path: "current"
         token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v2
+      with:
+        ref: 'refs/tags/test-old-version'
+    - name: Run with dest path for older version
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
+        target_branch: multiple_versions_test_pages_branch
+        keep_history: true
+        target_path: "old"
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    
       
   multiple-versions-test: 
     runs-on: ubuntu-latest
