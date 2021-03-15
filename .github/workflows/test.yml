@@ -430,7 +430,6 @@ jobs:
 
   multiple-versions-prepare:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - name: Clean up branch
       env:
@@ -439,7 +438,9 @@ jobs:
         git init
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
-        git commit -m "empty commit"
+        echo "keep me" > .gitkeep
+        gita add .gitkeep
+        git commit "[skip ci] intial commit"
         git push --force https://${GITHUB_ACTOR}:${AUTH_TOKEN}/github.com/${GITHUB_REPOSITORY} multiple_versions_test_pages_branch
     
   multiple-versions-publish: 
