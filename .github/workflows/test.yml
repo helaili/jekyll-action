@@ -433,17 +433,14 @@ jobs:
     continue-on-error: true
     steps:
     - name: Clean up branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{ secrets.JEKYLL_PAT }}
-        script: |
-          github.git.deleteRef(
-            {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'heads/multiple_versions_test_pages_branch'
-            }
-          )
+      env:
+        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: | 
+        git init
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
+        git commit -m "empty commit"
+        git push --force https://${GITHUB_ACTOR}:${AUTH_TOKEN}/github.com/${GITHUB_REPOSITORY} multiple_versions_test_pages_branch
     
   multiple-versions-publish: 
     runs-on: ubuntu-latest
