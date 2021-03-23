@@ -341,6 +341,7 @@ jobs:
     - run: | 
         git config --global init.defaultBranch main
         git init
+        git remote add origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
         echo "<html><body><p>hello</p><p>${GITHUB_RUN_ID}</p></body></html>" > hello.html
