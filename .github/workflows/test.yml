@@ -342,12 +342,13 @@ jobs:
       with:
         ref: keep_history_test_pages_branch
     - run: | 
+        rm -rf *
         echo "<html><body><p>hello</p><p>${GITHUB_RUN_ID}</p></body></html>" > hello.html
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
         git add hello.html
         git commit -m "adding a new file"
-        git push origin keep_history_test_pages_branch
+        git push --force origin keep_history_test_pages_branch
   
   keep-history-publish: 
     runs-on: ubuntu-latest
@@ -439,7 +440,6 @@ jobs:
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
         target_branch: multiple_versions_test_pages_branch
-        keep_history: true
         target_path: /
         token: ${{ secrets.GITHUB_TOKEN }}
       
