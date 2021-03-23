@@ -433,7 +433,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: ref-to-publish
+        ref: master
     - name: Run with dest path
       uses: ./
       with:
@@ -449,7 +449,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: ref-to-publish
+        ref: master
     - name: Run with dest path
       uses: ./
       with:
