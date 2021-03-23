@@ -17,7 +17,10 @@ inputs:
     description: 'The Jekyll Gemfile directory'
     required: false
   target_branch:
-    description: 'The target branch name the sources get pushed to'
+    description: 'The target branch name the site gets pushed to'
+    required: false
+  target_path:
+    description: 'The relative path where the site gets pushed to'
     required: false
   build_only:
     description: 'Will build the Jekyll site without publishing it'

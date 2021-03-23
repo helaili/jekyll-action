@@ -28,8 +28,7 @@ else
   JEKYLL_SRC=$(find . -path '*/vendor/bundle' -prune -o -name '_config.yml' -exec dirname {} \;)
   JEKYLL_FILES_COUNT=$(echo "$JEKYLL_SRC" | wc -l)
   if [ "$JEKYLL_FILES_COUNT" != "1" ]; then
-    echo "::error::Found $JEKYLL_FILES_COUNT Jekyll sites! Please define which to use with input variable \"jekyll_src\""
-    echo "$JEKYLL_SRC"
+    echo "::error::Found $JEKYLL_FILES_COUNT Jekyll sites from $JEKYLL_SRC! Please define which to use with input variable \"jekyll_src\""
     exit 1
   fi
   JEKYLL_SRC=$(echo $JEKYLL_SRC | tr -d '\n')
@@ -87,6 +86,13 @@ echo "::debug::Build dir is ${BUILD_DIR}"
 mkdir $BUILD_DIR
 cd $BUILD_DIR
 
+if [ -n "${INPUT_TARGET_PATH}" ] && [ "${INPUT_TARGET_PATH}" != '/' ]; then
+  TARGET_DIR="${BUILD_DIR}/${INPUT_TARGET_PATH}"
+  echo "::debug::target path is set to ${INPUT_TARGET_PATH}"
+else
+  TARGET_DIR=$BUILD_DIR
+fi
+
 if [ "${INPUT_KEEP_HISTORY}" = true ]; then
   echo "::debug::Cloning ${remote_branch} from repo ${REMOTE_REPO}"
   git clone --branch $remote_branch $REMOTE_REPO .
@@ -119,7 +125,7 @@ else
   echo "::debug::Jekyll debug is off"
 fi
 
-JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d ${BUILD_DIR} ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
+JEKYLL_ENV=${INPUT_JEKYLL_ENV} bundle exec ${BUNDLE_ARGS} jekyll build -s ${GITHUB_WORKSPACE}/${JEKYLL_SRC} -d ${TARGET_DIR} ${INPUT_JEKYLL_BUILD_OPTIONS} ${VERBOSE} 
 echo "Jekyll build done"
 
 if [ "${INPUT_BUILD_ONLY}" = true ]; then
