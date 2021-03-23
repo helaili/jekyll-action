@@ -116,6 +116,9 @@ The Jekyll Gemfile directory
 ### target_branch
 The target branch name the sources get pushed to
 
+### target_path:
+The relative path where the site gets pushed to
+
 ### build_only
 When set to `true`, the Jekyll site will be built but not published
 
@@ -127,6 +130,55 @@ When set to `true`, previous version of the site will be restored before the Jek
 
 ```yml
 keep_files: [.git, hello.html]
+```
+
+## Use case: multi version publishing 
+
+Say you want to create a documentation website where you both have the current version (`v3.0`), but also `v1.0` and `v2.0`. You can then use a combination of `keep_history` and `target_path` along with the `actions/checkout@v2`action so that each version gets pushed in a separate folder without overwritting the previous one. 
+
+```yaml 
+... 
+  publish-current-version: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+    - name: Run with dest path
+      uses: helaili/jekyll-build@v2
+      with:
+        target_branch: gh-pages
+        target_path: /
+        keep_history: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-v2-version: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: v2.0
+    - name: Run with dest path
+      uses: helaili/jekyll-build@v2
+      with:
+        target_branch: gh-pages
+        target_path: v2.0
+        keep_history: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+  
+  publish-v1-version: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: v1.0
+    - name: Run with dest path
+      uses: helaili/jekyll-build@v2
+      with:
+        target_branch: gh-pages
+        target_path: v1.0        
+        keep_history: true
+        token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Deprecation
