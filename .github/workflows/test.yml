@@ -339,13 +339,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: | 
+        git config init.defaultBranch main
         git init
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" 
         echo "<html><body><p>hello</p><p>${GITHUB_RUN_ID}</p></body></html>" > hello.html
         git add hello.html
         git commit -m "adding a new file"
-        git push --force origin keep_history_test_pages_branch
+        git push --force origin main:keep_history_test_pages_branch
   
   keep-history-publish: 
     runs-on: ubuntu-latest
