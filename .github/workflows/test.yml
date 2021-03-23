@@ -439,8 +439,7 @@ jobs:
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
-        target_branch: multiple_versions_test_pages_branch/${GITHUB_RUN_ID}
-        keep_history: true
+        target_branch: multiple_versions_test_pages_branch
         target_path: /
         token: ${{ secrets.GITHUB_TOKEN }}
       
@@ -455,7 +454,7 @@ jobs:
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
-        target_branch: multiple_versions_test_pages_branch/${GITHUB_RUN_ID}
+        target_branch: multiple_versions_test_pages_branch
         keep_history: true
         target_path: current
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -471,7 +470,7 @@ jobs:
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_multiple_versions.yml"
-        target_branch: multiple_versions_test_pages_branch/${GITHUB_RUN_ID}
+        target_branch: multiple_versions_test_pages_branch
         keep_history: true
         target_path: old
         token: ${{ secrets.GITHUB_TOKEN }}
