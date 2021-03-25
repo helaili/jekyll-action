@@ -35,6 +35,9 @@ inputs:
       new dependencies. For example, use `apk --update add 
       imagemagick` to install ImageMagick.
     required: false
+  pre_publish_commands:
+    description: 'Commands to run prior to publish.'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'

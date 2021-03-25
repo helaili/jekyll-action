@@ -137,6 +137,11 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
   exit 1
 fi
 
+if [ -n "$INPUT_PRE_PUBLISH_COMMANDS" ]; then
+  echo "Execute pre-publish commands specified by the user."
+  eval "$INPUT_PRE_PUBLISH_COMMANDS"
+fi 
+
 cd ${BUILD_DIR}
 
 # No need to have GitHub Pages to run Jekyll
