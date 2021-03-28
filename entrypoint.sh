@@ -80,10 +80,15 @@ fi
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 echo "::debug::Remote is ${REMOTE_REPO}"
-BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
+if [ -n "${INPUT_BUILD_DIR}" ]; then
+  BUILD_DIR="${INPUT_BUILD_DIR}"
+else
+  BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
+fi
+
 echo "::debug::Build dir is ${BUILD_DIR}"
 
-mkdir $BUILD_DIR
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 if [ -n "${INPUT_TARGET_PATH}" ] && [ "${INPUT_TARGET_PATH}" != '/' ]; then
