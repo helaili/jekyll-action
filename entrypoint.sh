@@ -70,16 +70,16 @@ if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   echo "::debug::target branch is set via input parameter"
 else
   # Let's try to figure out the GH Pages branch. We can do this if the repo is public
-  is_private_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
+  repo_details_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
     "https://api.github.com/repos/${GITHUB_REPOSITORY}")
-  is_private=$(echo "$is_private_response" | awk -F'[:,]' '/\"private\"/ { print $2 }')
-  echo "::debug::Repo visibility: private=${is_private}"
+  is_private=$(echo "$repo_details_response" | awk -F'[:,]' '/\"private\"/ { print $2 }')
+  echo "::debug::Is this repo private? ${is_private}"
   
   if [ -z "${is_private}" ]; then
     echo "::error::Cannot get repository visibility via API."
-    echo "::error::${is_private_response}"
+    echo "::error::${repo_details_response}"
     exit 1
-  elif [ "${is_private}" = false ]; then 
+  elif [ $is_private = false ]; then 
     # This is a public repo. Getting the Pages settings
     remote_branch_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
                   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
@@ -96,9 +96,7 @@ else
     # Is this a regular repo or an org.github.io type of repo
     case "${GITHUB_REPOSITORY}" in
       *.github.io) 
-        default_branch_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
-                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
-        default_branch=$(echo "$default_branch_response" | awk -F'"' '/\"default_branch\\"/ { print $4 }')
+        default_branch=$(echo "$repo_details_response" | awk -F'"' '/\"default_branch\\"/ { print $4 }')
         echo "::debug::Repo default branch is ${default_branch}"
         
         if [ -z "${default_branch}" ]; then
