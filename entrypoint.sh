@@ -65,18 +65,53 @@ else
 fi  
 
 if [ -n "${INPUT_TARGET_BRANCH}" ]; then
+  # If we have an input target branch, then go with it
   remote_branch="${INPUT_TARGET_BRANCH}"
   echo "::debug::target branch is set via input parameter"
 else
-  response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
-                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
-  remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
-  if [ -z "${remote_branch}" ]; then
-    echo "::error::Cannot get GitHub Pages source branch via API."
-    echo "::error::${response}"
+  # Let's try to figure out the GH Pages branch. We can do this if the repo is public
+  repo_details_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
+    "https://api.github.com/repos/${GITHUB_REPOSITORY}")
+  is_private=$(echo "$repo_details_response" | awk -F'[:,]' '/\"private\"/ { print $2 }')
+  echo "::debug::Is this repo private? ${is_private}"
+  
+  if [ -z "${is_private}" ]; then
+    echo "::error::Cannot get repository visibility via API."
+    echo "::error::${repo_details_response}"
     exit 1
+  elif [ $is_private = false ]; then 
+    # This is a public repo. Getting the Pages settings
+    remote_branch_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
+                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
+    remote_branch=$(echo "$remote_branch_response" | awk -F'"' '/\"branch\"/ { print $4 }')
+    echo "::debug::Pages' branch from settings is ${remote_branch}"
+    
+    if [ -z "${remote_branch}" ]; then
+      echo "::error::Cannot get GitHub Pages source branch via API."
+      echo "::error::${remote_branch_response}"
+      exit 1
+    fi
+  else  
+    # This is a private repo. 
+    # Is this a regular repo or an org.github.io type of repo
+    case "${GITHUB_REPOSITORY}" in
+      *.github.io) 
+        default_branch=$(echo "$repo_details_response" | awk -F'"' '/\"default_branch\\"/ { print $4 }')
+        echo "::debug::Repo default branch is ${default_branch}"
+        
+        if [ -z "${default_branch}" ]; then
+          echo "::error::Cannot get the default branch via API."
+          echo "::error::${default_branch_response}"
+          exit 1
+        fi
+        remote_branch=$default_branch ;;
+      *)           
+        remote_branch="gh-pages" ;;
+    esac
   fi
 fi
+
+echo "::debug::Remote branch is ${remote_branch}"
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 echo "::debug::Remote is ${REMOTE_REPO}"
