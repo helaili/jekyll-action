@@ -79,9 +79,7 @@ else
     echo "::error::Cannot get repository visibility via API."
     echo "::error::${is_private_response}"
     exit 1
-  fi
-
-  if [ "${is_private}" = false ]; then 
+  elif [ "${is_private}" = false ]; then 
     # This is a public repo. Getting the Pages settings
     remote_branch_response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
                   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
@@ -93,7 +91,7 @@ else
       echo "::error::${remote_branch_response}"
       exit 1
     fi
-  elif 
+  else  
     # This is a private repo. 
     # Is this a regular repo or an org.github.io type of repo
     case "${GITHUB_REPOSITORY}" in
