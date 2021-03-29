@@ -113,6 +113,8 @@ else
   fi
 fi
 
+echo "::debug::Remote branch is ${remote_branch}"
+
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 echo "::debug::Remote is ${REMOTE_REPO}"
 BUILD_DIR="${GITHUB_WORKSPACE}/../jekyll_build"
