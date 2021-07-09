@@ -139,6 +139,10 @@ fi
 
 cd ${BUILD_DIR}
 
+if [ -n "${INPUT_CNAME}" ]; then
+  echo $INPUT_CNAME > CNAME
+fi
+
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
 

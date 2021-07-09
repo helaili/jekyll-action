@@ -35,6 +35,9 @@ inputs:
       new dependencies. For example, use `apk --update add 
       imagemagick` to install ImageMagick.
     required: false
+  cname:
+    description: 'contents of the CNAME file'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
