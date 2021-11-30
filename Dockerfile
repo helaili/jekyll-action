@@ -1,4 +1,4 @@
-FROM ruby:2.7-alpine
+FROM ruby:2.7-alpine3.14
 
 LABEL version="2.0.1"
 LABEL repository="https://github.com/helaili/jekyll-action"
