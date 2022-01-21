@@ -8,6 +8,11 @@ if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
   eval "$INPUT_PRE_BUILD_COMMANDS"
 fi 
 
+if [ -n "$INPUT_BUNDLER_VERSON" ]; then
+  echo "Installing bundler version specified by the user."
+  gem install bundler -v $INPUT_BUNDLER_VERSON
+fi 
+
 if [ -z "${INPUT_TOKEN}" ] && [ -n "${JEKYLL_PAT}" ]; then
   echo "::warning::The JEKYLL_PAT environment variable is deprecated. Please use the token parameter"
   INPUT_TOKEN=${JEKYLL_PAT}
