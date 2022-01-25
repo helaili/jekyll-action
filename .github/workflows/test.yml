@@ -149,12 +149,12 @@ jobs:
               path: "/"
             }
           })
-          /*
           await github.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
           
+          /*
           const {SHA} = process.env
 
           for (let retry = 1; retry <= 5; retry++) {
