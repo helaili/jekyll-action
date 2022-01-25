@@ -35,6 +35,8 @@ jobs:
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
+      env: 
+        SHA: ${{ needs.basic_run.outputs.sha }}
       with:
         github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
         script: |
@@ -50,19 +52,19 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo
           })
-          console.log(context)
-          /*
+          
+          const {SHA} = process.env
+
           for (let retry = 0; retry < 5; retry++) {
-            let {status, commit} = await github.repos.getLatestPagesBuild({
+            const {status, commit} = await github.repos.getLatestPagesBuild({
               owner: context.repo.owner,
               repo: context.repo.repo
             })
-            if (commit == context.needs.basic_run.outputs.sha) {
+            if (commit === SHA) {
               break 
             }
             await sleep(10000)
           }
-          */
       
   basic_test: 
     runs-on: ubuntu-latest
