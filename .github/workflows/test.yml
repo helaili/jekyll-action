@@ -55,15 +55,21 @@ jobs:
           
           const {SHA} = process.env
 
-          for (let retry = 0; retry < 5; retry++) {
+          for (let retry = 1; retry <= 5; retry++) {
+            // Starting at 1 so the output message doesn't need manipulation
+
             const {status, commit} = await github.repos.getLatestPagesBuild({
               owner: context.repo.owner,
               repo: context.repo.repo
             })
             if (commit === SHA) {
               break 
+            } else if (retry < 5) {  
+              await new Promise(resolve => setTimeout(resolve, 5000))
+              core.info(`Site has not been published yet. Retry ${retry}/5`) 
+            } else {
+              core.info('Site has not been published yet') 
             }
-            await new Promise(resolve => setTimeout(resolve, 5000))
           }
       
   basic_test: 
@@ -127,6 +133,8 @@ jobs:
 
   jekyll_src_run: 
     runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.run.outputs.sha }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
@@ -136,6 +144,7 @@ jobs:
         restore-keys: |
           gems
     - name: Basic run
+      id: run
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_src.yml"
@@ -151,6 +160,8 @@ jobs:
     needs: [basic_test, jekyll_src_run]
     steps:
     - name: Set the GH Pages branch
+      env: 
+        SHA: ${{ needs.jekyll_src_run.outputs.sha }}
       uses: actions/github-script@v3
       with:
         github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
@@ -167,6 +178,25 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo
           })
+          
+          const {SHA} = process.env
+
+          for (let retry = 1; retry <= 5; retry++) {
+            // Starting at 1 so the output message doesn't need manipulation
+
+            const {status, commit} = await github.repos.getLatestPagesBuild({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+            if (commit === SHA) {
+              break 
+            } else if (retry < 5) {  
+              await new Promise(resolve => setTimeout(resolve, 5000))
+              core.info(`Site has not been published yet. Retry ${retry}/5`) 
+            } else {
+              core.info('Site has not been published yet') 
+            }
+          }
 
   jekyll_src_test: 
     runs-on: ubuntu-latest
