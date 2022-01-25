@@ -45,7 +45,7 @@ jobs:
       
   basic-test: 
     runs-on: ubuntu-latest
-    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish, keep-history-publish]
+    needs: [basic-publish]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
