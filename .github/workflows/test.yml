@@ -48,6 +48,7 @@ jobs:
               path: "/"
             }
           })
+          /*
           await github.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
@@ -71,6 +72,7 @@ jobs:
               core.info('Site has not been published yet') 
             }
           }
+          */
       
   basic_test: 
     runs-on: ubuntu-latest
@@ -143,7 +145,7 @@ jobs:
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
-    - name: Basic run
+    - name: Jekyll src run
       id: run
       uses: ./
       with:
@@ -174,6 +176,7 @@ jobs:
               path: "/"
             }
           })
+          /*
           await github.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
@@ -197,6 +200,7 @@ jobs:
               core.info('Site has not been published yet') 
             }
           }
+          */
 
   jekyll_src_test: 
     runs-on: ubuntu-latest
