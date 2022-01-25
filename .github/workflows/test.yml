@@ -107,7 +107,7 @@ jobs:
         name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
         path: tests/e2e/videos
 
-jekyll-src-run: 
+  jekyll-src-run: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -127,7 +127,7 @@ jekyll-src-run:
       env:
         JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
-      
+        
   jekyll-src-publish: 
     runs-on: ubuntu-latest
     needs: [basic-test, jekyll-src-run]
