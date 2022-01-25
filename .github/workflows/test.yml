@@ -7,7 +7,7 @@ env:
   URL: https://helaili.github.io/jekyll-action/
 
 jobs:
-  basic-publish: 
+  basic-run: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,6 +25,11 @@ jobs:
         build_only: false
         pre_build_commands: apk --update add imagemagick nodejs
         token: ${{ secrets.GITHUB_TOKEN }}
+        
+  basic-publish:
+    runs-on: ubuntu-latest
+    needs: [basic-run]
+    steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
