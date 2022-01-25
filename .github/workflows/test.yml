@@ -7,7 +7,7 @@ env:
   URL: https://helaili.github.io/jekyll-action/
 
 jobs:
-  basic-run: 
+  basic_run: 
     runs-on: ubuntu-latest
     outputs:
       sha: ${{ steps.run.outputs.sha }}
@@ -29,9 +29,9 @@ jobs:
         pre_build_commands: apk --update add imagemagick nodejs
         token: ${{ secrets.GITHUB_TOKEN }}
     
-  basic-publish:
+  basic_publish:
     runs-on: ubuntu-latest
-    needs: [basic-run]
+    needs: [basic_run]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
@@ -50,10 +50,20 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo
           })
+          for (let retry = 0; retry < 5; retry++) {
+            let {status, commit} = await github.repos.getLatestPagesBuild({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+            if (commit == context.needs.basic_run.outputs.sha) {
+              break 
+            }
+            await sleep(10000)
+          }
       
-  basic-test: 
+  basic_test: 
     runs-on: ubuntu-latest
-    needs: [basic-publish]
+    needs: [basic_publish]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
@@ -110,7 +120,7 @@ jobs:
         name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
         path: tests/e2e/videos
 
-  jekyll-src-run: 
+  jekyll_src_run: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -131,9 +141,9 @@ jobs:
         JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
         
-  jekyll-src-publish: 
+  jekyll_src_publish: 
     runs-on: ubuntu-latest
-    needs: [basic-test, jekyll-src-run]
+    needs: [basic_test, jekyll_src_run]
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
@@ -153,7 +163,7 @@ jobs:
             repo: context.repo.repo
           })
 
-  jekyll-src-test: 
+  jekyll_src_test: 
     runs-on: ubuntu-latest
     needs: jekyll-src-publish
     steps:
