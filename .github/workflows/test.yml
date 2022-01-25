@@ -50,6 +50,8 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo
           })
+          console.log(context)
+          /*
           for (let retry = 0; retry < 5; retry++) {
             let {status, commit} = await github.repos.getLatestPagesBuild({
               owner: context.repo.owner,
@@ -60,6 +62,7 @@ jobs:
             }
             await sleep(10000)
           }
+          */
       
   basic_test: 
     runs-on: ubuntu-latest
