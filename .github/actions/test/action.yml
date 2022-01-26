@@ -1,0 +1,51 @@
+name: 'Test'
+description: 'Test the published site'
+inputs:
+  token:  
+    description: 'The GitHub token'
+    required: true
+  spec:  
+    description: 'The scenario to test'
+    required: true
+  suffix:  
+    description: 'Suffix for the cypress output files name'
+    required: true
+runs:
+  using: "composite"
+  steps:  
+  - name: Caching
+    uses: actions/cache@v2
+    with:
+      path: ~/.npm
+      key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      restore-keys: |
+        ${{ runner.os }}-node
+  - name: Get the URL of the rendered site
+    shell: sh
+    id: rendered-site-url
+    env:
+      AUTH_TOKEN: ${{ inputs.token }}
+    run: |
+      full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
+      "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
+      awk -F'"' '/\"html_url\"/ { print $4 }')
+      url=$(dirname "${full_url}")
+      echo "::set-output name=url::${url}"
+  - name: Cypress run
+    uses: cypress-io/github-action@v2
+    with:
+      config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
+      working-directory: tests/e2e
+      spec: ${{ inputs.spec }}
+  - name: Save Cypress Screenshots
+    uses: actions/upload-artifact@v2
+    if: failure()
+    with:
+      name: cypress-screenshots-${{ inputs.suffix  }}
+      path: tests/e2e/cypress/screenshots
+  - name: Save Cypress Videos
+    uses: actions/upload-artifact@v2
+    if: always()
+    with:
+      name: cypress-videos-${{ inputs.suffix  }}
+      path: tests/e2e/cypress/videos

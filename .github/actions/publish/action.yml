@@ -1,0 +1,58 @@
+name: 'Publish'
+description: 'Set the Pages publishing environment and wait for the publication'
+inputs:
+  token:  
+    description: 'The GitHub token'
+    required: true
+  sha:  
+    description: 'The sha of the commit that is being published'
+    required: true
+  branch:  
+    description: 'The branch to set as the Pages source'
+    required: true
+  path:  
+    description: 'The path to set as the Pages source'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Pages Publication
+      uses: actions/github-script@v3
+      env: 
+        SHA: ${{ inputs.sha }}
+        PAGES_BRANCH: ${{ inputs.branch }}
+        PAGES_PATH: ${{ inputs.path }}
+      with:
+        github-token: ${{ inputs.token }} 
+        script: |
+          const {SHA, PAGES_BRANCH, PAGES_PATH} = process.env
+
+          await github.repos.updateInformationAboutPagesSite({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            source: {
+              branch: PAGES_BRANCH,
+              path: PAGES_PATH
+            }
+          })
+
+          await github.repos.requestPagesBuild({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          })
+
+          for (let retry = 1; retry <= 10; retry++) {
+            // Starting at 1 so the output message doesn't need manipulation
+            const {status, commit} = await github.repos.getLatestPagesBuild({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+            if (commit === SHA) {
+              return 
+            } else if (retry < 5) {  
+              await new Promise(resolve => setTimeout(resolve, 10000))
+              core.info(`Site has not been published yet. Retry ${retry}/10`) 
+            } else {
+              core.info('Site has not been published yet') 
+            }
+          }

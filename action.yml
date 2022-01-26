@@ -35,6 +35,9 @@ inputs:
       new dependencies. For example, use `apk --update add 
       imagemagick` to install ImageMagick.
     required: false
+outputs:
+  sha: 
+    description: 'Generated commit SHA1 that will be published'
 runs:
   using: 'docker'
   image: 'Dockerfile'
