@@ -17,7 +17,6 @@ runs:
   using: "composite"
   steps:
     - name: Pages Publication
-      description: Set the GH Pages branch, build and wait
       uses: actions/github-script@v3
       env: 
         SHA: ${{ inputs.sha }}
