@@ -72,6 +72,8 @@ jobs:
             repo: context.repo.repo
           })
 
+          const {SHA} = process.env
+
           for (let retry = 1; retry <= 5; retry++) {
             // Starting at 1 so the output message doesn't need manipulation
             const {status, commit} = await github.repos.getLatestPagesBuild({
