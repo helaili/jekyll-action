@@ -2,18 +2,17 @@ name: Testing the GitHub Pages publication
 
 on:
   push
-    
-env:
-  URL: https://helaili.github.io/jekyll-action/
+
+concurrency: test_environment
 
 jobs:
-  basic-publish: 
+  init:
     runs-on: ubuntu-latest
     steps:
     - name: Set the GH Pages branch
       uses: actions/github-script@v3
       with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
+        github-token: ${{secrets.JEKYLL_PAT}} 
         script: |
           await github.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
@@ -23,10 +22,13 @@ jobs:
               path: "/"
             }
           })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
+      
+  basic_run: 
+    runs-on: ubuntu-latest
+    needs: [init]
+    outputs:
+      sha: ${{ steps.run.outputs.sha }}
+    steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
@@ -35,6 +37,7 @@ jobs:
         restore-keys: |
           gems
     - name: Basic run
+      id: run
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_basic.yml"
@@ -42,68 +45,34 @@ jobs:
         build_only: false
         pre_build_commands: apk --update add imagemagick nodejs
         token: ${{ secrets.GITHUB_TOKEN }}
-      
-  basic-test: 
+    
+  basic_publish: 
     runs-on: ubuntu-latest
-    needs: [basic-publish, jekyll-src-publish, jekyll-gem-src-publish, keep-history-publish]
+    needs: [basic_run]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "gh-pages",
-              path: "/"
-            }
-          })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
-        spec: cypress/integration/basic/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-      # Test run video was always captured, so this action uses "always()" condition
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.basic_run.outputs.sha }} 
+        branch: "gh-pages"
+        path: "/"
 
-  jekyll-src-publish: 
+  basic_test: 
     runs-on: ubuntu-latest
+    needs: [basic_publish]
+    steps:  
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        spec: cypress/integration/basic/**/*
+        suffix: "basic"
+
+  jekyll_src_run: 
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.run.outputs.sha }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
@@ -112,7 +81,8 @@ jobs:
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
-    - name: Basic run
+    - name: Jekyll src run
+      id: run
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_src.yml"
@@ -122,66 +92,31 @@ jobs:
       env:
         JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
-      
-  jekyll-src-test: 
+        
+  jekyll_src_publish: 
     runs-on: ubuntu-latest
-    needs: basic-test
+    needs: [basic_test, jekyll_src_run]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "jekyll_src_test_pages_branch",
-              path: "/"
-            }
-          })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.jekyll_src_run.outputs.sha }} 
+        branch: "jekyll_src_test_pages_branch"
+        path: "/"
+
+  jekyll_src_test: 
+    runs-on: ubuntu-latest
+    needs: jekyll_src_publish
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/jekyll_src/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
-  
-  jekyll-gem-src-publish: 
+        suffix: "jekyll_src"
+
+  jekyll_gem_src_run: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -200,65 +135,30 @@ jobs:
         target_branch: jekyll_gem_src_test_pages_branch
         token: ${{ secrets.GITHUB_TOKEN }}
       
-  jekyll-gem-src-test: 
+  jekyll_gem_src_publish: 
     runs-on: ubuntu-latest
-    needs: jekyll-src-test
+    needs: [jekyll_src_test, jekyll_gem_src_run]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "jekyll_gem_src_test_pages_branch",
-              path: "/"
-            }
-          })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
-        spec: cypress/integration/jekyll_gem_src/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.jekyll_gem_src_run.outputs.sha }} 
+        branch: "jekyll_gem_src_test_pages_branch"
+        path: "/"
   
-  build-only-publish: 
+  jekyll_gem_src_test: 
+    runs-on: ubuntu-latest
+    needs: [jekyll_gem_src_publish]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        spec: cypress/integration/jekyll_gem_src/**/*
+        suffix: "jekyll_gem_src"
+
+  build_only_run: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -268,7 +168,7 @@ jobs:
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
-    - name: Basic run
+    - name: Build only run
       uses: ./
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_build_only.yml"
@@ -276,66 +176,30 @@ jobs:
         build_only: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
-  build-only-test: 
+  build_only_publish: 
     runs-on: ubuntu-latest
-    needs: jekyll-gem-src-test
+    needs: [jekyll_gem_src_test, build_only_run]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "jekyll_gem_src_test_pages_branch",
-              path: "/"
-            }
-          })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
-        # We're not publishing so the previous test should still pass
-        spec: cypress/integration/jekyll_gem_src/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.jekyll_gem_src_run.outputs.sha }} 
+        branch: "jekyll_gem_src_test_pages_branch"
+        path: "/"
+    
+  build_only_test: 
+    runs-on: ubuntu-latest
+    needs: build_only_publish
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        spec: cypress/integration/jekyll_gem_src/**/*  # We're not publishing so the previous test should still pass
+        suffix: "build_only"
   
-  keep-history-prepare: 
+  keep_history_prepare: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -350,9 +214,9 @@ jobs:
         git commit -m "adding a new file"
         git push --force origin keep_history_test_pages_branch
   
-  keep-history-publish: 
+  keep_history_run: 
     runs-on: ubuntu-latest
-    needs: keep-history-prepare
+    needs: keep_history_prepare
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
@@ -370,66 +234,30 @@ jobs:
         keep_history: true
         token: ${{ secrets.GITHUB_TOKEN }}
       
-  keep-history-test: 
+  keep_history_publish: 
     runs-on: ubuntu-latest
-    needs: build-only-test
+    needs: [build_only_test, keep_history_run]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "keep_history_test_pages_branch",
-              path: "/"
-            }
-          })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.keep_history_run.outputs.sha }} 
+        branch: "keep_history_test_pages_branch"
+        path: "/"
+  
+  keep_history_test: 
+    runs-on: ubuntu-latest
+    needs: keep_history_publish
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/keep_history/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-      # Test run video was always captured, so this action uses "always()" condition
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+        suffix: "keep_history"
     
-  multiple-versions-slash-publish: 
+  multiple_versions_slash_publish: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -443,9 +271,9 @@ jobs:
         target_path: /
         token: ${{ secrets.GITHUB_TOKEN }}
       
-  multiple-versions-current-publish: 
+  multiple_versions_current_publish: 
     runs-on: ubuntu-latest
-    needs: multiple-versions-slash-publish
+    needs: multiple_versions_slash_publish
     steps:
     - uses: actions/checkout@v2
       with:
@@ -459,9 +287,9 @@ jobs:
         target_path: current
         token: ${{ secrets.GITHUB_TOKEN }}
   
-  multiple-versions-old-publish: 
+  multiple_versions_old_publish: 
     runs-on: ubuntu-latest
-    needs: multiple-versions-current-publish
+    needs: multiple_versions_current_publish
     steps:
     - uses: actions/checkout@v2
       with:
@@ -476,62 +304,25 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
       
   
-  multiple-versions-test: 
+  multiple_versions_publish: 
     runs-on: ubuntu-latest
-    needs: [keep-history-test, multiple-versions-old-publish]
+    needs: [keep_history_test, multiple_versions_old_publish]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "multiple_versions_test_pages_branch",
-              path: "/"
-            }
-          })
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.multiple_versions_old_publish.outputs.sha }} 
+        branch: "multiple_versions_test_pages_branch"
+        path: "/"
+
+  multiple_versions_test: 
+    runs-on: ubuntu-latest
+    needs: multiple_versions_publish
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/multiple/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
-  
-  
+        suffix: "multiple_versions"

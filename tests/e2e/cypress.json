@@ -2,5 +2,5 @@
   "fixturesFolder": false,
   "supportFile": false,
   "pluginsFile": false,
-  "defaultCommandTimeout": 10000
+  "defaultCommandTimeout": 180000
 }

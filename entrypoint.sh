@@ -82,6 +82,8 @@ else
     echo "::error::Cannot get GitHub Pages source branch via API."
     echo "::error::${response}"
     exit 1
+  else 
+    echo "::debug::using the branch ${remote_branch} set on the repo settings"
   fi
 fi
 
@@ -156,6 +158,7 @@ git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
 git commit $COMMIT_OPTIONS -m "jekyll build from Action ${GITHUB_SHA}" && \
 git push $PUSH_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
+echo "::set-output name=SHA::$( git rev-parse ${LOCAL_BRANCH} )"
 rm -fr .git && \
 cd .. 
 
