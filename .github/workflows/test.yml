@@ -51,44 +51,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [basic_run]
     steps:
-    - name: Set the GH Pages branch
-      uses: actions/github-script@v3
-      env: 
-        SHA: ${{ needs.basic_run.outputs.sha }}
-      with:
-        github-token: ${{secrets.JEKYLL_PAT}} # Need a PAT to switch the branch
-        script: |
-          await github.repos.updateInformationAboutPagesSite({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            source: {
-              branch: "gh-pages",
-              path: "/"
-            }
-          })
-
-          await github.repos.requestPagesBuild({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          })
-
-          const {SHA} = process.env
-
-          for (let retry = 1; retry <= 10; retry++) {
-            // Starting at 1 so the output message doesn't need manipulation
-            const {status, commit} = await github.repos.getLatestPagesBuild({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            })
-            if (commit === SHA) {
-              break 
-            } else if (retry < 5) {  
-              await new Promise(resolve => setTimeout(resolve, 10000))
-              core.info(`Site has not been published yet. Retry ${retry}/10`) 
-            } else {
-              core.info('Site has not been published yet') 
-            }
-          }
+    - uses: ./.github/actions/publish
+      with: 
+        github-token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.basic_run.outputs.sha }} 
+        branch: "gh-pages"
+        path: "/"
 
   basic_test: 
     runs-on: ubuntu-latest
