@@ -64,42 +64,11 @@ jobs:
     needs: [basic_publish]
     steps:  
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/basic/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-      # Test run video was always captured, so this action uses "always()" condition
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+        suffix: "basic"
 
   jekyll_src_run: 
     runs-on: ubuntu-latest
