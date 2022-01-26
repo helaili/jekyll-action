@@ -1,7 +1,7 @@
 name: 'Publish'
 description: 'Set the Pages publishing environment and wait for the publication'
 inputs:
-  github-token:  
+  token:  
     description: 'The GitHub token'
     required: true
   sha:  
@@ -23,7 +23,7 @@ runs:
         PAGES_BRANCH: ${{ inputs.branch }}
         PAGES_PATH: ${{ inputs.path }}
       with:
-        github-token: ${{ inputs.github_token }} 
+        github-token: ${{ inputs.token }} 
         script: |
           const {SHA, PAGES_BRANCH, PAGES_PATH} = process.env
 

@@ -54,7 +54,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/publish
       with: 
-        github-token: ${{ secrets.JEKYLL_PAT }}
+        token: ${{ secrets.JEKYLL_PAT }}
         sha: ${{ needs.basic_run.outputs.sha }} 
         branch: "gh-pages"
         path: "/"
