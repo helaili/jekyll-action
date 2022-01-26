@@ -4,7 +4,7 @@ inputs:
   token:  
     description: 'The GitHub token'
     required: true
-  specs:  
+  spec:  
     description: 'The scenario to test'
     required: true
   suffix:  
@@ -36,7 +36,7 @@ runs:
     with:
       config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
       working-directory: tests/e2e
-      spec: ${{ inputs.specs }}
+      spec: ${{ inputs.spec }}
   - name: Save Cypress Screenshots
     uses: actions/upload-artifact@v2
     if: failure()
