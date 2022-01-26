@@ -74,7 +74,7 @@ jobs:
 
           const {SHA} = process.env
 
-          for (let retry = 1; retry <= 5; retry++) {
+          for (let retry = 1; retry <= 10; retry++) {
             // Starting at 1 so the output message doesn't need manipulation
             const {status, commit} = await github.repos.getLatestPagesBuild({
               owner: context.repo.owner,
@@ -83,8 +83,8 @@ jobs:
             if (commit === SHA) {
               break 
             } else if (retry < 5) {  
-              await new Promise(resolve => setTimeout(resolve, 5000))
-              core.info(`Site has not been published yet. Retry ${retry}/5`) 
+              await new Promise(resolve => setTimeout(resolve, 10000))
+              core.info(`Site has not been published yet. Retry ${retry}/10`) 
             } else {
               core.info('Site has not been published yet') 
             }
