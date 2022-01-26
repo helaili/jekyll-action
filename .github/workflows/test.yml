@@ -111,41 +111,11 @@ jobs:
     needs: jekyll_src_publish
     steps:
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/jekyll_src/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+        suffix: "jekyll_src"
 
   jekyll_gem_src_run: 
     runs-on: ubuntu-latest
@@ -183,41 +153,11 @@ jobs:
     needs: [jekyll_gem_src_publish]
     steps:
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/jekyll_gem_src/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+        suffix: "jekyll_gem_src"
 
   build_only_run: 
     runs-on: ubuntu-latest
@@ -254,42 +194,11 @@ jobs:
     needs: build_only_publish
     steps:
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
-        # We're not publishing so the previous test should still pass
-        spec: cypress/integration/jekyll_gem_src/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        spec: cypress/integration/jekyll_gem_src/**/*  # We're not publishing so the previous test should still pass
+        suffix: "build_only"
   
   keep_history_prepare: 
     runs-on: ubuntu-latest
@@ -343,42 +252,11 @@ jobs:
     needs: keep_history_publish
     steps:
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/keep_history/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-      # Test run video was always captured, so this action uses "always()" condition
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+        suffix: "keep_history"
     
   multiple_versions_slash_publish: 
     runs-on: ubuntu-latest
@@ -444,38 +322,9 @@ jobs:
     needs: multiple_versions_publish
     steps:
     - uses: actions/checkout@v2
-    - name: Caching
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Get the URL of the rendered site
-      id: rendered-site-url
-      run: |
-        full_url=$(curl -sH "Authorization: token ${AUTH_TOKEN}" \
-        "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
-        awk -F'"' '/\"html_url\"/ { print $4 }')
-        url=$(dirname "${full_url}")
-        echo "::set-output name=url::${url}"
-      env:
-        AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
-        working-directory: tests/e2e
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/multiple/**/*
-    - name: Save Cypress Screenshots
-      uses: actions/upload-artifact@v2
-      if: failure()
-      with:
-        name: cypress-screenshots-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/screenshots
-    - name: Save Cypress Videos
-      uses: actions/upload-artifact@v2
-      if: always()
-      with:
-        name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
-        path: tests/e2e/videos
+        suffix: "multiple_versions"
+        
