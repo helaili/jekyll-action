@@ -277,7 +277,7 @@ jobs:
         name: cypress-videos-${{ runner.os }}-${{ matrix.node-version }}
         path: tests/e2e/videos
 
-  build-only-run: 
+  build_only_run: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
