@@ -21,6 +21,7 @@ runs:
       restore-keys: |
         ${{ runner.os }}-node
   - name: Get the URL of the rendered site
+    shell: sh
     id: rendered-site-url
     env:
       AUTH_TOKEN: ${{ inputs.token }}
@@ -35,7 +36,7 @@ runs:
     with:
       config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
       working-directory: tests/e2e
-      spec: ${{ input.specs }}
+      spec: ${{ inputs.specs }}
   - name: Save Cypress Screenshots
     uses: actions/upload-artifact@v2
     if: failure()
