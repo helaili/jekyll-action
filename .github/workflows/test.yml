@@ -2,9 +2,6 @@ name: Testing the GitHub Pages publication
 
 on:
   push
-    
-env:
-  URL: https://helaili.github.io/jekyll-action/
 
 jobs:
   init:
@@ -327,4 +324,3 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/multiple/**/*
         suffix: "multiple_versions"
-        
