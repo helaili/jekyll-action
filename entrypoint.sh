@@ -75,6 +75,8 @@ else
     echo "::error::Cannot get GitHub Pages source branch via API."
     echo "::error::${response}"
     exit 1
+  else 
+    echo "::debug::using the branch ${remote_branch} set on the repo settings"
   fi
 fi
 

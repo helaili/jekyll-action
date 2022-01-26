@@ -3,6 +3,8 @@ name: Testing the GitHub Pages publication
 on:
   push
 
+concurrency: test_environment
+
 jobs:
   init:
     runs-on: ubuntu-latest
