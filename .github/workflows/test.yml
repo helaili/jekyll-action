@@ -87,7 +87,7 @@ jobs:
       env:
         AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
+      uses: cypress-io/github-action@v2
       with:
         config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
@@ -177,7 +177,7 @@ jobs:
       env:
         AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
+      uses: cypress-io/github-action@v2
       with:
         config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
@@ -259,7 +259,7 @@ jobs:
       env:
         AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Cypress run
-      uses: cypress-io/github-action@v2.7.2
+      uses: cypress-io/github-action@v2
       with:
         config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
         working-directory: tests/e2e
