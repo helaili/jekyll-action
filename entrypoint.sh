@@ -8,8 +8,6 @@ if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
   eval "$INPUT_PRE_BUILD_COMMANDS"
 fi 
 
-echo "INPUT_BUNDLER_VERSION:${INPUT_BUNDLER_VERSION}"
-
 if [ -n "$INPUT_BUNDLER_VERSION" ]; then
   echo "Installing bundler version specified by the user."
   gem install bundler -v $INPUT_BUNDLER_VERSION
