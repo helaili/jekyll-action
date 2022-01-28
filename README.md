@@ -133,7 +133,7 @@ keep_files: [.git, hello.html]
 ```
 
 ### bundler_version
-When set override the default bundler version provided.
+When set override the default bundler version provided. If not given will attempt to resolve bundler version from `Gemfile.lock` if one exists.
 
 ## Use case: multi version publishing 
 
