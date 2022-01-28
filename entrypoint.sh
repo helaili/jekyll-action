@@ -3,14 +3,14 @@ set -e
 
 echo "Starting the Jekyll Action"
 
-if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
-  echo "Execute pre-build commands specified by the user."
-  eval "$INPUT_PRE_BUILD_COMMANDS"
-fi 
-
 if [ -n "$INPUT_BUNDLER_VERSION" ]; then
   echo "Installing bundler version specified by the user."
   gem install bundler -v $INPUT_BUNDLER_VERSION
+fi 
+
+if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
+  echo "Execute pre-build commands specified by the user."
+  eval "$INPUT_PRE_BUILD_COMMANDS"
 fi 
 
 if [ -z "${INPUT_TOKEN}" ] && [ -n "${JEKYLL_PAT}" ]; then
