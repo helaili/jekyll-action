@@ -120,7 +120,7 @@ cd "${GITHUB_WORKSPACE}/${GEM_SRC}"
 
 if [ -z "${INPUT_BUNDLER_VERSION}" ] && [ -f "Gemfile.lock" ]; then 
   echo "Resolving bundler version from Gemfile.lock"
-  VERSION_LINE_NUMBER=$(($(  | grep -oE '\d+')+1))
+  VERSION_LINE_NUMBER=$(($(cat Gemfile.lock | grep -n 'BUNDLED WITH' | grep -oE '\d+')+1))
   BUNDLER_VERSION=$(head -n ${VERSION_LINE_NUMBER} Gemfile.lock  | tail -n 1 | xargs)
   gem install bundler -v ${BUNDLER_VERSION}
 fi
