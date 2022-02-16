@@ -149,6 +149,7 @@ fi
 
 cd ${BUILD_DIR}
 
+# Initializing the repo now to prevent the Jekyll build from overwriting the .git folder 
 if [ "${INPUT_KEEP_HISTORY}" != true ]; then
   echo "::debug::Initializing new repo"
   LOCAL_BRANCH="main"
@@ -156,9 +157,6 @@ if [ "${INPUT_KEEP_HISTORY}" != true ]; then
   PUSH_OPTIONS="--force"
   COMMIT_OPTIONS=""
 fi
-
-pwd
-ls -al
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
