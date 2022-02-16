@@ -64,21 +64,35 @@ else
   INPUT_JEKYLL_ENV="production"
 fi  
 
+# Which branch will be used for publishing? 
+# It can be provided, or dectected through API or inferred from the repo name, which is a bit of a legacy behavior.
 if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   remote_branch="${INPUT_TARGET_BRANCH}"
   echo "::debug::target branch is set via input parameter"
-else
+elif [ -n "${INPUT_TOKEN}" ]; then
   response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
                   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
   remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
   if [ -z "${remote_branch}" ]; then
-    echo "::error::Cannot get GitHub Pages source branch via API."
-    echo "::error::${response}"
-    exit 1
+    echo "::warning::Cannot get GitHub Pages source branch via API."
+    echo "::warning::${response}"
   else 
     echo "::debug::using the branch ${remote_branch} set on the repo settings"
   fi
 fi
+
+# In case the remote branch was neither provided nor detected via API.
+if [ -z "${remote_branch}" ]; then
+  case "${GITHUB_REPOSITORY}" in
+    *.github.io) remote_branch="master" ;;
+    *)           remote_branch="gh-pages" ;;
+  esac
+  echo "::debug::resolving to ${remote_branch} with a bit of a guess. Maybe we should default to main instead of master?"
+fi
+
+echo "Remote branch is ${remote_branch}"
+
+
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 echo "::debug::Remote is ${REMOTE_REPO}"
