@@ -155,6 +155,9 @@ fi
 
 cd ${BUILD_DIR}
 
+pwd
+ls -al
+
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
 
