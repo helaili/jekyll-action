@@ -115,14 +115,6 @@ if [ "${INPUT_KEEP_HISTORY}" = true ]; then
   LOCAL_BRANCH=$remote_branch
   PUSH_OPTIONS=""
   COMMIT_OPTIONS="--allow-empty"
-else 
-  echo "::debug::Initializing new repo"
-  LOCAL_BRANCH="main"
-  git init -b $LOCAL_BRANCH
-  PUSH_OPTIONS="--force"
-  COMMIT_OPTIONS=""
-  pwd
-  ls -al
 fi
 
 echo "::debug::Local branch is ${LOCAL_BRANCH}"
@@ -156,6 +148,14 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 cd ${BUILD_DIR}
+
+if [ "${INPUT_KEEP_HISTORY}" != true ]; then
+  echo "::debug::Initializing new repo"
+  LOCAL_BRANCH="main"
+  git init -b $LOCAL_BRANCH
+  PUSH_OPTIONS="--force"
+  COMMIT_OPTIONS=""
+fi
 
 pwd
 ls -al
