@@ -74,8 +74,8 @@ elif [ -n "${INPUT_TOKEN}" ]; then
                   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
   remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
   if [ -z "${remote_branch}" ]; then
-    echo "::error::Cannot get GitHub Pages source branch via API."
-    echo "::error::${response}"
+    echo "::warning::Cannot get GitHub Pages source branch via API."
+    echo "::warning::${response}"
   else 
     echo "::debug::using the branch ${remote_branch} set on the repo settings"
   fi
