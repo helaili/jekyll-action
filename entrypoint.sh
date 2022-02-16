@@ -64,16 +64,10 @@ else
   INPUT_JEKYLL_ENV="production"
 fi  
 
-
-case "${GITHUB_REPOSITORY}" in
-  *.github.io) remote_branch="master" ;;
-  *)           remote_branch="gh-pages" ;;
-esac
-  
 if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   remote_branch="${INPUT_TARGET_BRANCH}"
   echo "::debug::target branch is set via input parameter"
-else
+elif [ -n "${INPUT_TOKEN}" ]; then
   response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
                   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
   remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
@@ -84,6 +78,12 @@ else
   else 
     echo "::debug::using the branch ${remote_branch} set on the repo settings"
   fi
+else 
+  case "${GITHUB_REPOSITORY}" in
+    *.github.io) remote_branch="master" ;;
+    *)           remote_branch="gh-pages" ;;
+  esac
+  echo "::debug::resolving to ${remote_branch} with a bit of a guess. Maybe we should default to main instead of master?"
 fi
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
