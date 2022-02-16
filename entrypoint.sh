@@ -67,7 +67,7 @@ fi
 if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   remote_branch="${INPUT_TARGET_BRANCH}"
   echo "::debug::target branch is set via input parameter"
-elif [ -n "${INPUT_TOKEN}" ] && [ "${INPUT_BUILD_ONLY}" != true ]; then
+else 
   response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
                   "https://${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages")
   remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
@@ -78,12 +78,6 @@ elif [ -n "${INPUT_TOKEN}" ] && [ "${INPUT_BUILD_ONLY}" != true ]; then
   else 
     echo "::debug::using the branch ${remote_branch} set on the repo settings"
   fi
-else 
-  case "${GITHUB_REPOSITORY}" in
-    *.github.io) remote_branch="master" ;;
-    *)           remote_branch="gh-pages" ;;
-  esac
-  echo "::debug::resolving to ${remote_branch} with a bit of a guess. Maybe we should default to main instead of master?"
 fi
 
 REMOTE_REPO="https://${GITHUB_ACTOR}:${INPUT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
