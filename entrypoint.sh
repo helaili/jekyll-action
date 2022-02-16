@@ -121,6 +121,8 @@ else
   git init -b $LOCAL_BRANCH
   PUSH_OPTIONS="--force"
   COMMIT_OPTIONS=""
+  pwd
+  ls -al
 fi
 
 echo "::debug::Local branch is ${LOCAL_BRANCH}"
