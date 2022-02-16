@@ -115,12 +115,6 @@ if [ "${INPUT_KEEP_HISTORY}" = true ]; then
   LOCAL_BRANCH=$remote_branch
   PUSH_OPTIONS=""
   COMMIT_OPTIONS="--allow-empty"
-else 
-  echo "::debug::Initializing new repo"
-  LOCAL_BRANCH="main"
-  git init -b $LOCAL_BRANCH
-  PUSH_OPTIONS="--force"
-  COMMIT_OPTIONS=""
 fi
 
 echo "::debug::Local branch is ${LOCAL_BRANCH}"
@@ -154,6 +148,15 @@ if [ "${GITHUB_REF}" = "refs/heads/${remote_branch}" ]; then
 fi
 
 cd ${BUILD_DIR}
+
+# Initializing the repo now to prevent the Jekyll build from overwriting the .git folder 
+if [ "${INPUT_KEEP_HISTORY}" != true ]; then
+  echo "::debug::Initializing new repo"
+  LOCAL_BRANCH="main"
+  git init -b $LOCAL_BRANCH
+  PUSH_OPTIONS="--force"
+  COMMIT_OPTIONS=""
+fi
 
 # No need to have GitHub Pages to run Jekyll
 touch .nojekyll
