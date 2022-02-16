@@ -75,7 +75,7 @@ if [ -n "${INPUT_TARGET_BRANCH}" ]; then
   echo "::debug::target branch is set via input parameter"
 else
   response=$(curl -sH "Authorization: token ${INPUT_TOKEN}" \
-                  "https://${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages")
+                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
   remote_branch=$(echo "$response" | awk -F'"' '/\"branch\"/ { print $4 }')
   if [ -z "${remote_branch}" ]; then
     echo "::error::Cannot get GitHub Pages source branch via API."
