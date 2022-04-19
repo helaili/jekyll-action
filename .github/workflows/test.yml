@@ -105,13 +105,13 @@ jobs:
         
   jekyll_bundler_publish: 
     runs-on: ubuntu-latest
-    needs: [basic_test, jekyll_src_run]
+    needs: [basic_test, jekyll_bundler_run]
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
-        sha: ${{ needs.jekyll_src_run.outputs.sha }} 
+        sha: ${{ needs.jekyll_bundler_run.outputs.sha }} 
         branch: "jekyll_src_test_pages_branch"
         path: "/"
 
@@ -159,13 +159,13 @@ jobs:
         
   jekyll_bundler_from_lock_publish: 
     runs-on: ubuntu-latest
-    needs: [basic_test, jekyll_src_run]
+    needs: [basic_test, jekyll_bundler_from_lock_run]
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
-        sha: ${{ needs.jekyll_src_run.outputs.sha }} 
+        sha: ${{ needs.jekyll_bundler_from_lock_run.outputs.sha }} 
         branch: "jekyll_src_test_pages_branch"
         path: "/"
 
