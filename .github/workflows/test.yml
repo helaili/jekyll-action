@@ -1,7 +1,9 @@
 name: Testing the GitHub Pages publication
 
 on:
-  push
+  push:
+    branches: [master]
+  pull_request: ~
 
 concurrency: test_environment
 
