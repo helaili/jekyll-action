@@ -126,6 +126,59 @@ jobs:
         spec: cypress/integration/jekyll_src/**/*
         suffix: "jekyll_src"
 
+  jekyll_bundler_from_lock_run: 
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.run.outputs.sha }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
+        restore-keys: |
+          gems
+    - name: Jekyll src run
+      id: run
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_src.yml"
+        jekyll_src: sample_site
+        target_branch: jekyll_src_test_pages_branch
+        jekyll_env: production
+      env:
+        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
+        JEKYLL_DEBUG: true
+    - id: extract-bundler-version
+      run: echo "::set-output name=value::$(bundler -v | cut -c 16- | xargs)"
+    - uses: nick-fields/assert-action@v1
+      with:
+        expected: 2.1.4
+        actual: ${{ steps.extract-bundler-version.outputs.value }}
+        comparison: exact
+        
+  jekyll_bundler_from_lock_publish: 
+    runs-on: ubuntu-latest
+    needs: [basic_test, jekyll_src_run]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.jekyll_src_run.outputs.sha }} 
+        branch: "jekyll_src_test_pages_branch"
+        path: "/"
+
+  jekyll_bundler_from_lock_test: 
+    runs-on: ubuntu-latest
+    needs: jekyll_bundler_publish
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/test
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        spec: cypress/integration/jekyll_src/**/*
+        suffix: "jekyll_src"
 
   jekyll_src_run: 
     runs-on: ubuntu-latest
