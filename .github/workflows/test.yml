@@ -96,7 +96,7 @@ jobs:
         JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
     - id: extract-bundler-version
-      run: echo "::set-output name=value::$(bundler -v | cut -c 16- | xargs)"
+      run: echo ::set-output name=value::$(bundler -v | cut -c 16- | xargs)
     - uses: nick-fields/assert-action@v1
       with:
         expected: 2.3.11
@@ -150,7 +150,7 @@ jobs:
         JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
     - id: extract-bundler-version
-      run: echo "::set-output name=value::$(bundler -v | cut -c 16- | xargs)"
+      run: echo ::set-output name=value::$(bundler -v | cut -c 16- | xargs)
     - uses: nick-fields/assert-action@v1
       with:
         expected: 2.1.4
