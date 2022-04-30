@@ -123,11 +123,7 @@ jobs:
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
-<<<<<<< HEAD
         spec: cypress/integration/jekyll_bundler/**/*
-=======
-        spec: cypress/integration/jekyll_budler/**/*
->>>>>>> 9f7435f (Additional)
         suffix: "jekyll_bundler"
 
   jekyll_bundler_from_lock_run: 
