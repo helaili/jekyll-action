@@ -138,7 +138,7 @@ jobs:
         key: gems-${{ hashFiles('**/Gemfile') }}
         restore-keys: |
           gems
-    - name: Jekyll src run
+    - name: Jekyll bundler lock run
       id: run
       uses: ./
       with:
