@@ -166,7 +166,7 @@ jobs:
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
         sha: ${{ needs.jekyll_bundler_from_lock_run.outputs.sha }} 
-        branch: "jekyll_src_test_pages_branch"
+        branch: "jekyll_bundler_lock_test_pages_branch"
         path: "/"
 
   jekyll_bundler_from_lock_test: 
