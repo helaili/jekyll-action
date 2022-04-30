@@ -177,8 +177,8 @@ jobs:
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
-        spec: cypress/integration/jekyll_src/**/*
-        suffix: "jekyll_src"
+        spec: cypress/integration/jekyll_bundler_lock/**/*
+        suffix: "jekyll_bundler_lock"
 
   jekyll_src_run: 
     runs-on: ubuntu-latest
