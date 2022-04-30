@@ -92,8 +92,8 @@ jobs:
         target_branch: jekyll_bundler_test_pages_branch
         jekyll_env: production
         bundler_version: 2.3.11
+        github-token: ${{secrets.JEKYLL_PAT}} 
       env:
-        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_DEBUG: true
     - id: extract-bundler-version
       run: echo ::set-output name=value::$(bundler -v | cut -c 16- | xargs)
