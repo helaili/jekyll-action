@@ -87,7 +87,7 @@ jobs:
       id: run
       uses: ./
       with:
-        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_src.yml"
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_bundler.yml"
         jekyll_src: sample_site
         target_branch: jekyll_bundler_test_pages_branch
         jekyll_env: production
