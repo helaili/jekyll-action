@@ -144,7 +144,7 @@ jobs:
       with:
         jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_jekyll_bundler_lock.yml"
         jekyll_src: sample_site
-        target_branch: jekyll_bunlder_lock_test_pages_branch
+        target_branch: jekyll_bundler_lock_test_pages_branch
         jekyll_env: production
       env:
         JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
