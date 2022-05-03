@@ -95,13 +95,6 @@ jobs:
         token: ${{secrets.JEKYLL_PAT}} 
       env:
         JEKYLL_DEBUG: true
-    - id: extract-bundler-version
-      run: echo "::set-output name=value::$(bundler -v | cut -c 16- | xargs)"
-    - uses: nick-fields/assert-action@v1
-      with:
-        expected: 2.3.11
-        actual: ${{ steps.extract-bundler-version.outputs.value }}
-        comparison: exact
         
   jekyll_bundler_publish: 
     runs-on: ubuntu-latest
@@ -149,13 +142,6 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
       env:
         JEKYLL_DEBUG: true
-    - id: extract-bundler-version-lock
-      run: echo "::set-output name=value::$(bundler -v | cut -c 16- | xargs)"
-    - uses: nick-fields/assert-action@v1
-      with:
-        expected: 2.1.4
-        actual: ${{ steps.extract-bundler-version-lock.outputs.value }}
-        comparison: exact
         
   jekyll_bundler_from_lock_publish: 
     runs-on: ubuntu-latest
