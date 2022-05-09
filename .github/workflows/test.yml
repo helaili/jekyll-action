@@ -145,7 +145,7 @@ jobs:
         
   jekyll_bundler_from_lock_publish: 
     runs-on: ubuntu-latest
-    needs: [basic_test, jekyll_bundler_from_lock_run]
+    needs: [jekyll_bundler_test, jekyll_bundler_from_lock_run]
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/publish
