@@ -59,17 +59,50 @@ jobs:
         sha: ${{ needs.basic_run.outputs.sha }} 
         branch: "gh-pages"
         path: "/"
-
-  basic_test: 
+  
+  build_dir_run: 
     runs-on: ubuntu-latest
-    needs: [basic_publish]
+    needs: [init]
+    outputs:
+      sha: ${{ steps.run.outputs.sha }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: sample_site_gemfiles/vendor/bundle
+        key: gems-${{ hashFiles('**/Gemfile') }}
+        restore-keys: |
+          gems
+    - name: Build dir run
+      id: run
+      uses: ./
+      with:
+        jekyll_build_options: "--config ../sample_site/_config.yml,../sample_site/_config_build_dir.yml"
+        build_dir: /jekyll_build_dir
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+  build_dir_publish: 
+    runs-on: ubuntu-latest
+    needs: [build_dir_run, basic_test]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/publish
+      with: 
+        token: ${{ secrets.JEKYLL_PAT }}
+        sha: ${{ needs.basic_run.outputs.sha }} 
+        branch: "gh-pages"
+        path: "/"
+
+  build_dir_test: 
+    runs-on: ubuntu-latest
+    needs: [build_dir_publish]
     steps:  
     - uses: actions/checkout@v2
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         spec: cypress/integration/basic/**/*
-        suffix: "basic"
+        suffix: "jekyll_build_dir"
 
   jekyll_bundler_run: 
     runs-on: ubuntu-latest
@@ -105,7 +138,7 @@ jobs:
         
   jekyll_bundler_publish: 
     runs-on: ubuntu-latest
-    needs: [basic_test, jekyll_bundler_run]
+    needs: [build_dir_test, jekyll_bundler_run]
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/publish
