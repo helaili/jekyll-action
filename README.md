@@ -208,3 +208,5 @@ If you're using a Custom Domain for your GitHub Pages site, you will need to ens
 If your GitHub Pages site is run off the `main` (or `master`) branch, you can modify the Custom Domain setting in the Repository Settings to automatically generate and commit the `CNAME` file.
 
 If your GitHub Pages site is run off an _alternate_ branch, however, you will need to manually create and commit the `CNAME` file with your custom domain as its contents, otherwise the file will be committed to the deployment branch and _overwritten the next time the action is run_.
+
+Note that you can [force the inclusion of your CNAME file](https://github.com/criptowiki/criptowiki/issues/15#issuecomment-886890153)
