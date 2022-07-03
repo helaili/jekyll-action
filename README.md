@@ -44,6 +44,15 @@ asciidoctor:
 
 Note that we also renamed `index.html` to `index.adoc` and modified this file accordingly in order to leverage AsciiDoc.
 
+### Create your publishing target
+The historical default behavior of GitHub Pages is to deploy the content of a `gh-pages` branch. If you want to rely on this and you don't have such a branch yet, you can create it with the following instructions 
+
+```
+git switch --orphan gh-pages
+git commit --allow-empty -m "Initial commit on orphan branch"
+git push -u origin gh-pages
+```
+
 ### Use the action
 Use the `helaili/jekyll-action@master` action in your workflow file. It needs access to the out-of-the-box `GITHUB_TOKEN` secret. The directory where the Jekyll site lives will be detected (based on the location of `_config.yml`) but you can also explicitly set this directory by setting the `jekyll_src` parameter (`sample_site` for us). The `SRC` environment variable is also supported for backward compatibilty but it is deprecated.
 The action will search for Gemfile location. If your want to specify it explicitly (e.g. if you have multiple Gemfiles per project), you should update `gem_src` input parameter accordingly.
