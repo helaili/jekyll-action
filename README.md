@@ -132,6 +132,9 @@ When set to `true`, previous version of the site will be restored before the Jek
 keep_files: [.git, hello.html]
 ```
 
+### bundler_version
+When set override the default bundler version provided. If not given will attempt to resolve bundler version from `Gemfile.lock` if one exists.
+
 ## Use case: multi version publishing 
 
 Say you want to create a documentation website where you both have the current version (`v3.0`), but also `v1.0` and `v2.0`. You can then use a combination of `keep_history` and `target_path` along with the `actions/checkout@v2`action so that each version gets pushed in a separate folder without overwritting the previous one. 

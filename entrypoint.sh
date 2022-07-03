@@ -3,6 +3,11 @@ set -e
 
 echo "Starting the Jekyll Action"
 
+if [ -n "${INPUT_BUNDLER_VERSION}" ]; then
+  echo "Installing bundler version specified by the user."
+  gem install bundler -v ${INPUT_BUNDLER_VERSION}
+fi 
+
 if [ -n "$INPUT_PRE_BUILD_COMMANDS" ]; then
   echo "Execute pre-build commands specified by the user."
   eval "$INPUT_PRE_BUILD_COMMANDS"
@@ -120,6 +125,13 @@ fi
 echo "::debug::Local branch is ${LOCAL_BRANCH}"
 
 cd "${GITHUB_WORKSPACE}/${GEM_SRC}"
+
+if [ -z "${INPUT_BUNDLER_VERSION}" ] && [ -f "Gemfile.lock" ]; then 
+  echo "Resolving bundler version from Gemfile.lock"
+  VERSION_LINE_NUMBER=$(($(cat Gemfile.lock | grep -n 'BUNDLED WITH' | grep -oE '\d+')+1))
+  BUNDLER_VERSION=$(head -n ${VERSION_LINE_NUMBER} Gemfile.lock  | tail -n 1 | xargs)
+  gem install bundler -v ${BUNDLER_VERSION}
+fi
 
 bundle config path "$PWD/vendor/bundle"
 echo "::debug::Bundle config set succesfully"
