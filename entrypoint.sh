@@ -185,7 +185,7 @@ git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
 git add . && \
 git commit $COMMIT_OPTIONS -m "jekyll build from Action ${GITHUB_SHA}" && \
 git push $PUSH_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
-echo "::set-output name=SHA::$( git rev-parse ${LOCAL_BRANCH} )"
+echo "SHA=$( git rev-parse ${LOCAL_BRANCH} )" >> $GITHUB_OUTPUT
 rm -fr .git && \
 cd .. 
 
