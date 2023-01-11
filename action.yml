@@ -41,6 +41,12 @@ inputs:
   bundler_version:
     description: 'When set override the default bundler version provided.'
     required: false
+  commit_author:
+    description: >
+      Provide an author for commits by the action. 
+      The email address is automatically set to 
+      `[author name]@users.noreply.github.com`
+    required: false
 outputs:
   sha: 
     description: 'Generated commit SHA1 that will be published'
