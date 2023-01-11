@@ -147,6 +147,9 @@ keep_files: [.git, hello.html]
 ### bundler_version
 When set override the default bundler version provided. If not given will attempt to resolve bundler version from `Gemfile.lock` if one exists.
 
+### commit_author
+When set override the default author of the commits to be performed. The default is to use the `GITHUB_ACTOR` environment variable, which is usually the owner of the `GITHUB_TOKEN` secret. The value can for example be set to `github-actions[bot]`. The corresponding email address is automatically set to `[commit_author]@users.noreply.github.com`.
+
 ## Use case: multi version publishing 
 
 Say you want to create a documentation website where you both have the current version (`v3.0`), but also `v1.0` and `v2.0`. You can then use a combination of `keep_history` and `target_path` along with the `actions/checkout@v2`action so that each version gets pushed in a separate folder without overwritting the previous one. 
