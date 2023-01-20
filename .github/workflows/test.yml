@@ -31,8 +31,8 @@ jobs:
     outputs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -46,13 +46,14 @@ jobs:
         jekyll_env: development
         build_only: false
         pre_build_commands: apk --update add imagemagick nodejs
+        commit_author: "helaili"
         token: ${{ secrets.GITHUB_TOKEN }}
     
   basic_publish: 
     runs-on: ubuntu-latest
     needs: [basic_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -64,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [basic_publish]
     steps:  
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -77,8 +78,8 @@ jobs:
     outputs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -96,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_dir_run, basic_test]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -108,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_dir_publish]
     steps:  
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -120,11 +121,11 @@ jobs:
     outputs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Delete lock file
       run: |
         rm sample_site_gemfiles/Gemfile.lock
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -151,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_dir_test, jekyll_bundler_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -163,7 +164,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: jekyll_bundler_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -175,8 +176,8 @@ jobs:
     outputs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -198,7 +199,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [jekyll_bundler_test, jekyll_bundler_from_lock_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -210,7 +211,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: jekyll_bundler_from_lock_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -222,8 +223,8 @@ jobs:
     outputs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -245,7 +246,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [jekyll_bundler_from_lock_test, jekyll_src_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -257,7 +258,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: jekyll_src_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -267,8 +268,8 @@ jobs:
   jekyll_gem_src_run: 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -287,7 +288,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [jekyll_src_test, jekyll_gem_src_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -299,7 +300,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [jekyll_gem_src_publish]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -309,8 +310,8 @@ jobs:
   build_only_run: 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -328,7 +329,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [jekyll_gem_src_test, build_only_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -340,7 +341,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_only_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -350,7 +351,7 @@ jobs:
   keep_history_prepare: 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: keep_history_test_pages_branch
     - run: | 
@@ -366,8 +367,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: keep_history_prepare
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -386,7 +387,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_only_test, keep_history_run]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -398,7 +399,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: keep_history_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -408,7 +409,7 @@ jobs:
   multiple_versions_slash_publish: 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: master
     - name: Run with dest path
@@ -423,7 +424,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: multiple_versions_slash_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: master
     - name: Run with dest path
@@ -439,7 +440,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: multiple_versions_current_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: test-old-version
     - name: Run with dest path
@@ -456,7 +457,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [keep_history_test, multiple_versions_old_publish]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
@@ -468,7 +469,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: multiple_versions_publish
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
