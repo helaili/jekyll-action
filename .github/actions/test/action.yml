@@ -40,6 +40,7 @@ runs:
       config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
       working-directory: tests/e2e
       spec: ${{ inputs.spec }}
+      browser: chrome
   - name: Save Cypress Screenshots
     uses: actions/upload-artifact@v3
     if: failure()
