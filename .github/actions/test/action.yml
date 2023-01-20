@@ -30,21 +30,21 @@ runs:
       "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
       awk -F'"' '/\"html_url\"/ { print $4 }')
       url=$(dirname "${full_url}")
-      echo "{url}=${url}" >> $GITHUB_OUTPUT
+      echo "url=${url}" >> $GITHUB_OUTPUT
   - name: Cypress run
-    uses: cypress-io/github-action@v2
+    uses: cypress-io/github-action@v5.0.5
     with:
       config: baseUrl=${{ steps.rendered-site-url.outputs.url }}
       working-directory: tests/e2e
       spec: ${{ inputs.spec }}
   - name: Save Cypress Screenshots
-    uses: actions/upload-artifact@v2
+    uses: actions/upload-artifact@v3
     if: failure()
     with:
       name: cypress-screenshots-${{ inputs.suffix  }}
       path: tests/e2e/cypress/screenshots
   - name: Save Cypress Videos
-    uses: actions/upload-artifact@v2
+    uses: actions/upload-artifact@v3
     if: always()
     with:
       name: cypress-videos-${{ inputs.suffix  }}
