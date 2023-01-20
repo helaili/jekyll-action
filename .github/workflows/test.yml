@@ -16,7 +16,7 @@ jobs:
       with:
         github-token: ${{secrets.JEKYLL_PAT}} 
         script: |
-          await github.repos.updateInformationAboutPagesSite({
+          await github.rest.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
             repo: context.repo.repo,
             source: {
