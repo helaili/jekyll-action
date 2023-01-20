@@ -31,6 +31,8 @@ runs:
       awk -F'"' '/\"html_url\"/ { print $4 }')
       url=$(dirname "${full_url}")
       echo "url=${url}" >> $GITHUB_OUTPUT
+  - name: Log the URL of the rendered site
+    run: echo ${{ steps.rendered-site-url.outputs.url }}
   - name: Cypress run
     uses: cypress-io/github-action@v5.0.5
     with:
