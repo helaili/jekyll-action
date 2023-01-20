@@ -14,7 +14,7 @@ runs:
   using: "composite"
   steps:  
   - name: Caching
-    uses: actions/cache@v2
+    uses: actions/cache@v3
     with:
       path: ~/.npm
       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -30,7 +30,7 @@ runs:
       "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" | \
       awk -F'"' '/\"html_url\"/ { print $4 }')
       url=$(dirname "${full_url}")
-      echo "::set-output name=url::${url}"
+      echo "{url}=${url}" >> $GITHUB_OUTPUT
   - name: Cypress run
     uses: cypress-io/github-action@v2
     with:
