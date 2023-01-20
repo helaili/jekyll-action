@@ -17,7 +17,7 @@ runs:
   using: "composite"
   steps:
     - name: Pages Publication
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       env: 
         SHA: ${{ inputs.sha }}
         PAGES_BRANCH: ${{ inputs.branch }}
@@ -27,7 +27,7 @@ runs:
         script: |
           const {SHA, PAGES_BRANCH, PAGES_PATH} = process.env
 
-          await github.repos.updateInformationAboutPagesSite({
+          await github.rest.repos.updateInformationAboutPagesSite({
             owner: context.repo.owner,
             repo: context.repo.repo,
             source: {
@@ -36,14 +36,14 @@ runs:
             }
           })
 
-          await github.repos.requestPagesBuild({
+          await github.rest.repos.requestPagesBuild({
             owner: context.repo.owner,
             repo: context.repo.repo
           })
 
           for (let retry = 1; retry <= 10; retry++) {
             // Starting at 1 so the output message doesn't need manipulation
-            const {status, commit} = await github.repos.getLatestPagesBuild({
+            const {status, commit} = await github.rest.repos.getLatestPagesBuild({
               owner: context.repo.owner,
               repo: context.repo.repo
             })
