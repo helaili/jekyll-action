@@ -32,7 +32,7 @@ jobs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -79,7 +79,7 @@ jobs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -125,7 +125,7 @@ jobs:
     - name: Delete lock file
       run: |
         rm sample_site_gemfiles/Gemfile.lock
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -177,7 +177,7 @@ jobs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -224,7 +224,7 @@ jobs:
       sha: ${{ steps.run.outputs.sha }}
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -269,7 +269,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -311,7 +311,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
@@ -368,7 +368,7 @@ jobs:
     needs: keep_history_prepare
     steps:
     - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
-    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3
+    - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
       with:
         path: sample_site_gemfiles/vendor/bundle
         key: gems-${{ hashFiles('**/Gemfile') }}
