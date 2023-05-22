@@ -1,6 +1,6 @@
 FROM ruby:3.2-alpine
 
-LABEL version="2.0.1"
+LABEL version="3.0.0"
 LABEL repository="https://github.com/helaili/jekyll-action"
 LABEL homepage="https://github.com/helaili/jekyll-action"
 LABEL maintainer="Alain Hélaïli <helaili@github.com>"
