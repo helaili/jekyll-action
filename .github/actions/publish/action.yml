@@ -51,7 +51,7 @@ runs:
               return 
             } else if (retry < 10) {  
               await new Promise(resolve => setTimeout(resolve, 10000))
-              core.info(`Site has not been published yet. Retry ${retry}/10`) 
+              core.info(`Site has not been published yet. Status is ${status}, commit is ${commit} Retry ${retry}/10`) 
             } else {
               core.setFailed('Site has not been published yet') 
             }
