@@ -49,10 +49,10 @@ runs:
             })
             if (commit === SHA) {
               return 
-            } else if (retry < 5) {  
+            } else if (retry < 10) {  
               await new Promise(resolve => setTimeout(resolve, 10000))
               core.info(`Site has not been published yet. Retry ${retry}/10`) 
             } else {
-              core.info('Site has not been published yet') 
+              core.setFailed('Site has not been published yet') 
             }
           }
