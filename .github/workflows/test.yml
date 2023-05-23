@@ -105,7 +105,7 @@ jobs:
     - uses: ./.github/actions/publish
       with: 
         token: ${{ secrets.JEKYLL_PAT }}
-        sha: ${{ needs.basic_run.outputs.sha }} 
+        sha: ${{ needs.build_dir_run.outputs.sha }} 
         branch: "gh-pages"
         path: "/"
 
@@ -331,7 +331,7 @@ jobs:
 
   build_only_publish: 
     runs-on: ubuntu-latest
-    needs: [jekyll_gem_src_test, build_only_run]
+    needs: [jekyll_gem_src_run, jekyll_gem_src_test, build_only_run]
     steps:
     - uses: actions/checkout@v3
     - uses: ./.github/actions/publish
