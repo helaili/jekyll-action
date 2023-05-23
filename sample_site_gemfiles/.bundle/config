@@ -1,0 +1,2 @@
+---
+BUNDLE_BUILD__EVENTMACHINE: "--with-cppflags=-I/opt/homebrew/opt/openssl@3/include"
