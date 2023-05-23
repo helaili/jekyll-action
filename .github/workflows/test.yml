@@ -147,10 +147,6 @@ jobs:
         token: ${{secrets.JEKYLL_PAT}} 
       env:
         JEKYLL_DEBUG: true
-    - name: Show used bundle version
-      run: |
-        bundle -v | cut -c 16- | xargs
-        cat sample_site_gemfiles/Gemfile.lock
         
   jekyll_bundler_publish: 
     runs-on: ubuntu-latest

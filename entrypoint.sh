@@ -4,7 +4,7 @@ set -e
 echo "Starting the Jekyll Action"
 
 if [ -n "${INPUT_BUNDLER_VERSION}" ]; then
-  echo "Installing bundler version specified by the user."
+  echo "Installing bundler version ${INPUT_BUNDLER_VERSION} specified by the user."
   gem install bundler -v ${INPUT_BUNDLER_VERSION}
 fi 
 
@@ -137,6 +137,9 @@ if [ -z "${INPUT_BUNDLER_VERSION}" ] && [ -f "Gemfile.lock" ]; then
   BUNDLER_VERSION=$(head -n ${VERSION_LINE_NUMBER} Gemfile.lock  | tail -n 1 | xargs)
   gem install bundler -v ${BUNDLER_VERSION}
 fi
+
+# Displaying bundler version used
+echo "Bundler version $(bundle --version | cut -c 16- | xargs) is used"
 
 bundle config path "$PWD/vendor/bundle"
 echo "::debug::Bundle config set succesfully"
