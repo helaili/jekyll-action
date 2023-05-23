@@ -50,7 +50,7 @@ runs:
 
           for (let retry = 1; retry <= 10; retry++) {
             // Starting at 1 so the output message doesn't need manipulation
-            const {status, commit} = await github.rest.repos.getLatestPagesBuild({
+            const {data: {status, commit}} = await github.rest.repos.getLatestPagesBuild({
               owner: context.repo.owner,
               repo: context.repo.repo
             })
