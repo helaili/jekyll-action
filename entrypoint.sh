@@ -190,9 +190,18 @@ else
   echo "::debug::commit author is set to the default github actor"
 fi
 git add . && \
-git commit $COMMIT_OPTIONS -m "jekyll build from Action ${GITHUB_SHA}" && \
-git push $PUSH_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch && \
+git commit $COMMIT_OPTIONS -m "jekyll build from Action ${GITHUB_SHA}"
+
+git push $PUSH_OPTIONS $REMOTE_REPO $LOCAL_BRANCH:$remote_branch
+push_exit_code=$?
+
+if [ $push_exit_code -ne 0 ]; then
+  echo "::error::pushing to ${REMOTE_REPO} failed. Exit code: ${push_exit_code}"
+  exit $push_exit_code
+fi
+
 echo "SHA=$( git rev-parse ${LOCAL_BRANCH} )" >> $GITHUB_OUTPUT
+
 rm -fr .git && \
 cd .. 
 
