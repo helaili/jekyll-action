@@ -117,7 +117,7 @@ jobs:
     - uses: ./.github/actions/test
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
-        spec: cypress/integration/basic/**/*
+        spec: cypress/integration/jekyll_build_dir/**/*
         suffix: "jekyll_build_dir"
 
   jekyll_bundler_run: 
