@@ -1,3 +1,13 @@
+# 🚨 Deprecation notice 🚨
+
+GitHub has a new way to publish a static site to Pages using GitHub Actions. This means you can now simply build with the Jekyll command (or something else) and use simple actions to publish. 
+This removes the need for Docker based actions and gives you all the freedom to configure the execution environment (versions of Ruby, extra dependencies...) and it is a lot faster. 
+You can check [the documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow)
+for more information on how to do this. 
+
+Maintaining this action was a great experience, but as there is now a better solution availabe I do encourage everyone to move over. 
+
+
 # jekyll-action
 A GitHub Action to build and publish Jekyll sites to GitHub Pages
 
